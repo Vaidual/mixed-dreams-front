@@ -5,12 +5,12 @@
   flex-direction: column;
 }
 
-.form {
+.formWrapper form {
   display: flex;
   flex-direction: column;
   width: 400px;
 }
 
-.input {
+.formWrapper form > * {
   margin-top: 20px;
 }

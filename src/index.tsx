@@ -8,9 +8,8 @@ import ErrorPage from './components/pages/error/Error';
 import Home from './components/pages/home/Home';
 import Login from './components/pages/auth/login/Login';
 import { StyledEngineProvider } from '@mui/material/styles';
-import Contact from './components/pages/auth/register/contact/Contact';
-import { FormProvider } from './hooks/useFormState';
-import Business from './components/pages/auth/register/business/Business';
+import RegisterWrapper from 'components/pages/auth/register/registerWrapper/RegisterWrapper';
+import AuthForm from 'components/pages/auth/form/AuthForm';
 
 const router = createBrowserRouter([
   {
@@ -23,17 +22,17 @@ const router = createBrowserRouter([
         element: <Home/>
       },
       {
-        path: '/login',
-        element: <Login/>
-      },
-      {
-        path: '/signup',
-        element: <Contact/>
-      }
-      ,
-      {
-        path: '/signup/business',
-        element: <Business/>
+        element: <AuthForm/>,
+        children: [
+          {
+            path: '/login',
+            element: <Login/>
+          },
+          {
+            path: '/signup',
+            element: <RegisterWrapper/>
+          }
+        ]
       }
     ]
   }
@@ -45,9 +44,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <StyledEngineProvider injectFirst>
-    <FormProvider>
       <RouterProvider router={router}/>
-    </FormProvider>
     </StyledEngineProvider>
   </React.StrictMode>
 );
