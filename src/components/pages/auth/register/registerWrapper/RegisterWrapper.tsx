@@ -9,7 +9,7 @@ import { AuthService } from 'services/auth/auth.service';
 import { produce } from 'immer';
 import { useFormState } from 'hooks/useFormState';
 import { format } from 'date-fns';
-import { useLocation } from 'react-router-dom';
+import { useRedirect } from 'hooks/useRedirect';
 
 export interface IRegisterStepsProps {
   formState: IOptionalRegisterCompany
@@ -52,14 +52,13 @@ const RegisterWrapper: FC = () => {
     [setFormState]
   );
  
+  const redirect = useRedirect();
   const onComplete = useCallback(async () => {
     console.log(formState)
     const {birthday, firstName, lastName, companyName, ...address} = formState.steps.business.value;
     const response = await AuthService.registerCompany({...formState.steps.account.value, birthday: format(birthday!, 'yyyy-MM-dd'), firstName, lastName, companyName, ...address})
-    // const location = useLocation();
-    // const { redirectTo } = queryString.parse(location.search);
-    // history.push(redirectTo == null ? "/" : redirectTo);
-  }, [formState]);
+    redirect()
+  }, [formState, redirect]);
   
   const registerSteps: FormStepType[] = [
     {label: 'Your account', element: <Contact onNext={next}/>}, 
