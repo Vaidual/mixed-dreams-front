@@ -1,5 +1,5 @@
 import { instance } from "api/api.interceptor";
-import { IRegisterCompany, IToken } from "interfaces/auth.interface";
+import { ILogin, IRegisterCompany, IToken } from "interfaces/auth.interface";
 
 export const AuthService = {
   async registerCompany(data: IRegisterCompany) {
@@ -9,6 +9,16 @@ export const AuthService = {
       data
     })
 
-    return response
+    return response.data as IToken
+  },
+
+  async login(data: ILogin) {
+    const response = await instance<IToken>({
+      url: '/auth/login',
+      method: 'POST',
+      data
+    })
+
+    return response.data as IToken
   }
 }

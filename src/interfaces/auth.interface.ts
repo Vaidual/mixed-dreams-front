@@ -19,5 +19,5 @@ export interface IToken {
 export interface ILogin {
   email: string,
   password: string,
-  rememberMe: number
+  rememberMe: boolean,
 }

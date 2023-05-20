@@ -6,8 +6,8 @@ import { Link } from "react-router-dom"
 const Header: FC = () => {
   return (
     <header className={styles.header}>
-      <Link to="/signup">
-        <Button>Signup</Button>
+      <Link to="/login">
+        <Button>Sign in</Button>
       </Link>
     </header>
   )

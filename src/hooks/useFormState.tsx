@@ -1,4 +1,3 @@
-
 import { ReactNode, createContext, useContext, useState } from "react";
 import { boolean, number, string } from "yup";
 
@@ -37,7 +36,7 @@ type FormStateType = {
   },
 };
 
-const FORM_STATE: FormStateType = {
+const DefaultFormState: FormStateType = {
   selectedIndex: 0,
   steps: {
     account: {
@@ -73,12 +72,12 @@ const FORM_STATE: FormStateType = {
 };
 
 const FormStateContext = createContext({
-  formState: FORM_STATE,
+  formState: DefaultFormState,
   setFormState: (form: FormStateType | ((form: FormStateType) => FormStateType)) => {},
 });
 
 export function FormProvider ({ children } : {children: ReactNode}) {
-  const [formState, setFormState] = useState<FormStateType>(FORM_STATE);
+  const [formState, setFormState] = useState<FormStateType>(DefaultFormState);
 
   return (
     <FormStateContext.Provider value={{formState, setFormState}}>
@@ -87,10 +86,15 @@ export function FormProvider ({ children } : {children: ReactNode}) {
   );
 }
  
-export function useFormState(): {formState: FormStateType, setFormState: (form: FormStateType | ((form: FormStateType) => FormStateType)) => void} {
-  const context = useContext(FormStateContext);
-  if (!context) {
-    throw new Error("useFormState must be used within the AppProvider");
-  }
-  return {...context};
+export function useFormState(): {
+  formState: FormStateType, 
+  setFormState: (form: FormStateType | ((form: FormStateType) => FormStateType)) => void, 
+  resetFormState: () => void} {
+    const context = useContext(FormStateContext);
+    const resetFormState = () => context.setFormState(DefaultFormState)
+    if (!context) {
+      throw new Error("useFormState must be used within the AppProvider");
+    }
+
+    return {resetFormState, ...context};
 }

@@ -23,7 +23,7 @@ type FormStepType = {
 }
 
 const RegisterWrapper: FC = () => {
-  const { formState, setFormState } = useFormState();
+  const { formState, setFormState, resetFormState } = useFormState();
 
   const next = useCallback(() => {
     setFormState(
@@ -54,11 +54,13 @@ const RegisterWrapper: FC = () => {
  
   const redirect = useRedirect();
   const onComplete = useCallback(async () => {
-    console.log(formState)
     const {birthday, firstName, lastName, companyName, ...address} = formState.steps.business.value;
+    console.log({birthday, firstName, lastName, companyName, ...address})
     const response = await AuthService.registerCompany({...formState.steps.account.value, birthday: format(birthday!, 'yyyy-MM-dd'), firstName, lastName, companyName, ...address})
+    console.log(response)
+    resetFormState()
     redirect()
-  }, [formState, redirect]);
+  }, [formState, redirect, resetFormState]);
   
   const registerSteps: FormStepType[] = [
     {label: 'Your account', element: <Contact onNext={next}/>}, 
@@ -67,20 +69,22 @@ const RegisterWrapper: FC = () => {
 
   return (
     <>
-    <Stepper sx={{ width: '100%' }} activeStep={formState.selectedIndex}>
-      {registerSteps.map((step, index) => (
-        <Step key={step.label} completed={index < formState.selectedIndex}>
-          <StepButton sx={{margin:'0'}} color="inherit" 
-            disabled={!Object.values(formState.steps)
-              .slice(0, index)
-              .every((step) => step.valid && !step.dirty)} 
-            onClick={() => setSelectedIndex(index)}>
-            {step.label}
-          </StepButton>
-        </Step>
-      ))}
-    </Stepper>
-    {registerSteps[formState.selectedIndex].element}
+    <div className='mt-10 mx-auto max-w-lg'>
+      <Stepper activeStep={formState.selectedIndex}>
+        {registerSteps.map((step, index) => (
+          <Step key={step.label} completed={index < formState.selectedIndex}>
+            <StepButton className='m-0' color="inherit" 
+              disabled={!Object.values(formState.steps)
+                .slice(0, index)
+                .every((step) => step.valid && !step.dirty)} 
+              onClick={() => setSelectedIndex(index)}>
+              {step.label}
+            </StepButton>
+          </Step>
+        ))}
+      </Stepper>
+      {registerSteps[formState.selectedIndex].element}
+    </div>
     </>
   )
 }

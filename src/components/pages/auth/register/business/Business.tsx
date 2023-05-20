@@ -136,83 +136,89 @@ const Business: FC<{onComplete: () => void; onPrev: () => void;}> = ({onPrev, on
   return (
     <>
     <form>
-      <TextField {...register("companyName")}
-        label="Business name*"
-        error={errors.companyName !== undefined} 
-        helperText={errors.companyName?.message} 
-        variant="outlined" />
-
-          <Controller
-              name="birthday"
-              control={control}
-              render={({
-                field: { onChange, value },
-                fieldState: {error, invalid}
-              }) => (
-                <DatePicker
-                  label="Date of birth*"
-                  disableFuture
-                  value={value !== undefined ? value : null}
-                  onChange={(value) =>{
-                    onChange(isDateValid(new Date(value!)) ? value : null)
-                  }
-                  }
-                />
-              )}
-            />
-
-
-
-      <div className={styles.doubleFieldBlock}>
-        <TextField {...register("firstName")}
-          label="First Name*"
-          error={errors.firstName !== undefined} 
-          helperText={errors.firstName?.message} 
+      <div className='border-b pb-6 space-y-4'>
+        <TextField {...register("companyName")}
+          fullWidth
+          label="Business name*"
+          error={errors.companyName !== undefined}
+          helperText={errors.companyName?.message}
           variant="outlined" />
-        <TextField {...register("lastName")}
-          label="Last Name*"
-          error={errors.lastName !== undefined} 
-          helperText={errors.lastName?.message} 
-          variant="outlined" />
-      </div>
-      <div className={styles.doubleFieldBlock}>
-      <TextField {...register("country")}
-        label="Country*"
-        error={errors.country !== undefined} 
-        helperText={errors.country?.message} 
-        variant="outlined" />
-      <TextField {...register("city")}
-        label="Street*"
-        error={errors.city !== undefined} 
-        helperText={errors.city?.message} 
-        variant="outlined" />
-      </div>
-      <div className={styles.doubleFieldBlock}>
-      <TextField {...register("state")}
-        label="State*"
-        error={errors.state !== undefined} 
-        helperText={errors.state?.message} 
-        variant="outlined" />
-      <TextField {...register("street")}
-        label="City*"
-        error={errors.street !== undefined} 
-        helperText={errors.street?.message} 
-        variant="outlined" />
-      </div>
-      <div className={styles.doubleFieldBlock}>
-      <TextField {...register("apartment")}
-        label="Apartment"
-        error={errors.apartment !== undefined} 
-        helperText={errors.apartment?.message} 
-        variant="outlined" />
-      <TextField {...register("zipCode")}
-        label="Postal code*"
-        error={errors.zipCode !== undefined} 
-        helperText={errors.zipCode?.message} 
-        variant="outlined" />
-      </div>
+        <Controller
+            name="birthday"
+            control={control}
+            render={({
+              field: { onChange, value },
+            }) => (
+              <DatePicker
+              className='w-full'
+                label="Date of birth*"
+                disableFuture
+                value={value !== undefined ? value : null}
+                onChange={(value) =>{
+                  onChange(isDateValid(new Date(value!)) ? value : null)
+                }
+                }
+              />
+            )}
+          />
+        <div>
+          <div className='grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6'>
+            <TextField {...register("firstName")}
+              className='sm:col-span-3'
+              fullWidth
+              label="First Name*"
+              error={errors.firstName !== undefined}
+              helperText={errors.firstName?.message}
+              variant="outlined" />
+            <TextField {...register("lastName")}
+              className='sm:col-span-3'
+              fullWidth
+              label="Last Name*"
+              error={errors.lastName !== undefined}
+              helperText={errors.lastName?.message}
+              variant="outlined" />
+            <TextField {...register("country")}
+              className='sm:col-span-3'
+              fullWidth
+              label="Country*"
+              error={errors.country !== undefined}
+              helperText={errors.country?.message}
+              variant="outlined" />
+            <TextField {...register("city")}
+              className='sm:col-span-3'
+              label="Street*"
+              error={errors.city !== undefined}
+              helperText={errors.city?.message}
+              variant="outlined" />
+            <TextField {...register("state")}
+              className='sm:col-span-3'
+              label="State*"
+              error={errors.state !== undefined}
+              helperText={errors.state?.message}
+              variant="outlined" />
+            <TextField {...register("street")}
+              className='sm:col-span-3'
+              label="City*"
+              error={errors.street !== undefined}
+              helperText={errors.street?.message}
+              variant="outlined" />
+            <TextField {...register("apartment")}
+              className='sm:col-span-3'
+              label="Apartment"
+              error={errors.apartment !== undefined}
+              helperText={errors.apartment?.message}
+              variant="outlined" />
+            <TextField {...register("zipCode")}
+              className='sm:col-span-3'
+              label="Postal code*"
+              error={errors.zipCode !== undefined}
+              helperText={errors.zipCode?.message}
+              variant="outlined" />
+          </div>
+        </div>
+    </div>
       </form>
-      <Box sx={{display:'flex', justifyContent:'space-between', width: '100%', marginTop:'10px'}}>
+      <Box className='flex justify-between mt-10px'>
         <Button onClick={() => {updateState(); onPrev();}}>
           Prev
         </Button>
