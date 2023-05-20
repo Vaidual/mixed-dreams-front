@@ -10,6 +10,9 @@ import Login from './components/pages/auth/login/Login';
 import { StyledEngineProvider } from '@mui/material/styles';
 import RegisterWrapper from 'components/pages/auth/register/registerWrapper/RegisterWrapper';
 import AuthForm from 'components/pages/auth/form/AuthForm';
+import { FormProvider } from 'hooks/useFormState';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const router = createBrowserRouter([
   {
@@ -44,7 +47,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <StyledEngineProvider injectFirst>
+      <FormProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
       <RouterProvider router={router}/>
+      </LocalizationProvider>
+      </FormProvider>
     </StyledEngineProvider>
   </React.StrictMode>
 );

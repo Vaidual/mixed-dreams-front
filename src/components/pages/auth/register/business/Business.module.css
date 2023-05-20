@@ -1,0 +1,9 @@
+.doubleFieldBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.doubleFieldBlock > * {
+  max-width: 210px;
+}

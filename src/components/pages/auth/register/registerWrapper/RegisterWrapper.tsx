@@ -1,11 +1,15 @@
-import { Button, StepLabel } from '@mui/material';
+import { StepButton } from '@mui/material';
 import Step from '@mui/material/Step';
 import Stepper from '@mui/material/Stepper';
-import { Dispatch, FC, SetStateAction, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useCallback } from 'react'
 import Contact from '../account/Account';
 import Business from '../business/Business';
-import { IOptionalRegisterCompany, IRegisterCompany } from 'interfaces/auth.interface';
+import { IOptionalRegisterCompany } from 'interfaces/auth.interface';
 import { AuthService } from 'services/auth/auth.service';
+import { produce } from 'immer';
+import { useFormState } from 'hooks/useFormState';
+import { format } from 'date-fns';
+import { useLocation } from 'react-router-dom';
 
 export interface IRegisterStepsProps {
   formState: IOptionalRegisterCompany
@@ -19,57 +23,65 @@ type FormStepType = {
 }
 
 const RegisterWrapper: FC = () => {
-  const [formState, setFormState] = useState<IOptionalRegisterCompany>({} as IOptionalRegisterCompany);
-  const [formData, setFormData] = useState<IOptionalRegisterCompany>()
-  const [activeStep, setActiveStep] = useState<number>(0);
-  const [nextBtnIsDisabled, setNextBtnIsDisabled] = useState(true);
+  const { formState, setFormState } = useFormState();
 
-  const stepProps: IRegisterStepsProps = {formState, setFormState, setNextBtnIsDisabled}
-
+  const next = useCallback(() => {
+    setFormState(
+      produce((form) => {
+        form.selectedIndex += 1;
+      })
+    );
+  }, [setFormState]);
+ 
+  const prev = useCallback(() => {
+    setFormState(
+      produce((form) => {
+        form.selectedIndex -= 1;
+      })
+    );
+  }, [setFormState]);
+ 
+  const setSelectedIndex = useCallback(
+    (index: number) => {
+      setFormState(
+        produce((form) => {
+          form.selectedIndex = index;
+        })
+      );
+    },
+    [setFormState]
+  );
+ 
+  const onComplete = useCallback(async () => {
+    console.log(formState)
+    const {birthday, firstName, lastName, companyName, ...address} = formState.steps.business.value;
+    const response = await AuthService.registerCompany({...formState.steps.account.value, birthday: format(birthday!, 'yyyy-MM-dd'), firstName, lastName, companyName, ...address})
+    // const location = useLocation();
+    // const { redirectTo } = queryString.parse(location.search);
+    // history.push(redirectTo == null ? "/" : redirectTo);
+  }, [formState]);
+  
   const registerSteps: FormStepType[] = [
-    {label: 'Your account', element: <Contact {...stepProps}/>}, 
-    {label: 'Business information', element: <Business {...stepProps}/>}
+    {label: 'Your account', element: <Contact onNext={next}/>}, 
+    {label: 'Business information', element: <Business onComplete={onComplete} onPrev={prev}/>}
   ];
-
-  const handleNext = async () => {
-    if (activeStep === registerSteps.length - 1) {
-      const response = await AuthService.registerCompany({...formState, ...formData} as IRegisterCompany)
-      console.log(response)
-    }
-    else {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
-  }
-
-  const handleBack = () => {
-    setFormState({...formState, ...formData})
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
   return (
     <>
-    <Stepper activeStep={activeStep}>
+    <Stepper sx={{ width: '100%' }} activeStep={formState.selectedIndex}>
       {registerSteps.map((step, index) => (
-        <Step key={step.label} completed={index <= activeStep}>
-          <StepLabel color="inherit">
+        <Step key={step.label} completed={index < formState.selectedIndex}>
+          <StepButton sx={{margin:'0'}} color="inherit" 
+            disabled={!Object.values(formState.steps)
+              .slice(0, index)
+              .every((step) => step.valid && !step.dirty)} 
+            onClick={() => setSelectedIndex(index)}>
             {step.label}
-          </StepLabel>
+          </StepButton>
         </Step>
       ))}
     </Stepper>
-    {registerSteps[activeStep].element}
-    <div>
-      <Button
-        color="inherit"
-        disabled={activeStep === 0}
-        onClick={handleBack}
-      >
-        Back
-      </Button>
-      <Button onClick={handleNext} disabled={nextBtnIsDisabled}>
-        {activeStep === registerSteps.length - 1 ? 'Finish' : 'Next'}
-      </Button>
-    </div>
+    {registerSteps[formState.selectedIndex].element}
     </>
   )
 }
