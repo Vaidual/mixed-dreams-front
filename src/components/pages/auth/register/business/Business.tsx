@@ -9,6 +9,8 @@ import { Box, Button } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { isValid as isDateValid } from 'date-fns';
 import styles from "./Business.module.css";
+import { useTranslation } from 'react-i18next';
+import { ErrorMessage } from 'components/ui/text/ErrorMessage';
 
 
 // interface IBusinessSchema {  
@@ -29,8 +31,8 @@ const schema = yup.object().shape({
   birthday: yup.date()
     .nullable()
     .required()
-    .min(new Date(1950, 1, 1), "min")
-    .max(new Date(), "max"),
+    .min(new Date(1950, 1, 1))
+    .max(new Date()),
 
   firstName: yup.string()
     .required()
@@ -133,15 +135,17 @@ const Business: FC<{onComplete: () => void; onPrev: () => void;}> = ({onPrev, on
     );
   }
 
+  const { t } = useTranslation(['common\\form', 'register']);
+
   return (
     <>
     <form>
       <div className='border-b pb-6 space-y-4'>
         <TextField {...register("companyName")}
           fullWidth
-          label="Business name*"
+          label={`${t("fields.businessName")}*`}
           error={errors.companyName !== undefined}
-          helperText={errors.companyName?.message}
+          helperText={<ErrorMessage error={errors.companyName?.message} field={t("fields.businessName") as string}/>}
           variant="outlined" />
         <Controller
             name="birthday"
@@ -150,8 +154,8 @@ const Business: FC<{onComplete: () => void; onPrev: () => void;}> = ({onPrev, on
               field: { onChange, value },
             }) => (
               <DatePicker
-              className='w-full'
-                label="Date of birth*"
+                className='w-full'
+                label={`${t("fields.birthday")}*`}
                 disableFuture
                 value={value !== undefined ? value : null}
                 onChange={(value) =>{
@@ -166,53 +170,53 @@ const Business: FC<{onComplete: () => void; onPrev: () => void;}> = ({onPrev, on
             <TextField {...register("firstName")}
               className='sm:col-span-3'
               fullWidth
-              label="First Name*"
+              label={`${t("fields.firstName")}*`}
               error={errors.firstName !== undefined}
-              helperText={errors.firstName?.message}
+              helperText={<ErrorMessage error={errors.companyName?.message} field={t("fields.businessName") as string}/>}
               variant="outlined" />
             <TextField {...register("lastName")}
               className='sm:col-span-3'
               fullWidth
-              label="Last Name*"
+              label={`${t("fields.lastName")}*`}
               error={errors.lastName !== undefined}
-              helperText={errors.lastName?.message}
+              helperText={<ErrorMessage error={errors.lastName?.message} field={t("fields.lastName") as string}/>}
               variant="outlined" />
             <TextField {...register("country")}
               className='sm:col-span-3'
               fullWidth
-              label="Country*"
+              label={`${t("fields.address.country")}*`}
               error={errors.country !== undefined}
-              helperText={errors.country?.message}
+              helperText={<ErrorMessage error={errors.country?.message} field={t("fields.country") as string}/>}
               variant="outlined" />
             <TextField {...register("city")}
               className='sm:col-span-3'
-              label="Street*"
+              label={`${t("fields.address.city")}*`}
               error={errors.city !== undefined}
-              helperText={errors.city?.message}
+              helperText={<ErrorMessage error={errors.city?.message} field={t("fields.city") as string}/>}
               variant="outlined" />
             <TextField {...register("state")}
               className='sm:col-span-3'
-              label="State*"
+              label={`${t("fields.address.state")}*`}
               error={errors.state !== undefined}
-              helperText={errors.state?.message}
+              helperText={<ErrorMessage error={errors.state?.message} field={t("fields.state") as string}/>}
               variant="outlined" />
             <TextField {...register("street")}
               className='sm:col-span-3'
-              label="City*"
+              label={`${t("fields.address.street")}*`}
               error={errors.street !== undefined}
-              helperText={errors.street?.message}
+              helperText={<ErrorMessage error={errors.street?.message} field={t("fields.street") as string}/>}
               variant="outlined" />
             <TextField {...register("apartment")}
               className='sm:col-span-3'
-              label="Apartment"
+              label={`${t("fields.address.apartment")}`}
               error={errors.apartment !== undefined}
-              helperText={errors.apartment?.message}
+              helperText={<ErrorMessage error={errors.apartment?.message} field={t("fields.apartment") as string}/>}
               variant="outlined" />
             <TextField {...register("zipCode")}
               className='sm:col-span-3'
-              label="Postal code*"
+              label={`${t("fields.address.zipCode")}*`}
               error={errors.zipCode !== undefined}
-              helperText={errors.zipCode?.message}
+              helperText={<ErrorMessage error={errors.zipCode?.message} field={t("fields.zipCode") as string}/>}
               variant="outlined" />
           </div>
         </div>
@@ -220,10 +224,10 @@ const Business: FC<{onComplete: () => void; onPrev: () => void;}> = ({onPrev, on
       </form>
       <Box className='flex justify-between mt-10px'>
         <Button onClick={() => {updateState(); onPrev();}}>
-          Prev
+          {t("buttons.prev")}
         </Button>
         <Button onClick={() => {updateState(); onComplete();}} disabled={!isValid}>
-          Finish
+          {t("buttons.finish")}
         </Button>
       </Box>
       </>

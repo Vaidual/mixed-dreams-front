@@ -1,0 +1,35 @@
+{
+  "fields":{
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword":"Confirm Password",
+    "businessName": "Business name",
+    "birthday": "Date of birth",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "address":{
+      "country":"Country",
+      "street":"Street",
+      "state":"State",
+      "city":"City",
+      "zipCode":"Postal Code",
+      "apartment":"Apartment"
+    }
+  },
+  "validations": {
+    "required": "Required",
+    "emailFormat":"Incorrect email format",
+    "minString":"{{field}} must be at least {{min}} characters",
+    "maxString":"{{field}} must be maximum {{max}} characters",
+    "passwordCharacters": "Password must contain al least one upper, lower and special character",
+    "passwordsNotMatching": "Passwords don't match"
+  },
+  "options": {
+    "signIn":"Sign in"
+  },
+  "buttons":{
+    "next": "Next",
+    "prev": "Previous",
+    "finish": "Finish"
+  }
+}

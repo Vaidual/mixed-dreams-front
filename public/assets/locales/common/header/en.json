@@ -1,0 +1,10 @@
+{
+  "navLinks": {
+    "product": "Product",
+    "features": "Features",
+    "tryNow": "Try now"
+  },
+  "actions": {
+    "logIn":"Log in"
+  }
+}

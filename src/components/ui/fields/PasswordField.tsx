@@ -1,11 +1,12 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material'
-import { FC, forwardRef } from 'react'
+import React, { ReactNode, forwardRef } from 'react'
 
 type Props = {
-  name: string
-  label: string,
-  error: string | undefined,
+  error: boolean;
+  name: string;
+  label: string;
+  helperText?: ReactNode | string,
   showPassword: boolean,
   onClick: React.MouseEventHandler<HTMLButtonElement>,
   isTouched: boolean,
@@ -18,12 +19,12 @@ type Props = {
 
 const PasswordField = forwardRef(function PasswordField(props : Props, ref) {
 
-  const {error, onClick, showPassword, isTouched, label, ...control} = props
+  const {helperText, error, onClick, showPassword, isTouched, label, ...control} = props
   return (
     <>
     <FormControl
       fullWidth
-      error={isTouched && error !== undefined} 
+      error={isTouched && error} 
       variant="outlined">
       <InputLabel>{label}</InputLabel>
       <OutlinedInput
@@ -43,7 +44,7 @@ const PasswordField = forwardRef(function PasswordField(props : Props, ref) {
           </InputAdornment>
         }
       />
-      {isTouched && <FormHelperText>{error}</FormHelperText>}
+      {isTouched && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
     </>
   )

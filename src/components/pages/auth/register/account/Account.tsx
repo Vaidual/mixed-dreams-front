@@ -1,33 +1,37 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import TextField from '@mui/material/TextField';
-import { useFormState } from 'hooks/useFormState';
+import { FormStateContext, FormStateType, useFormState } from 'hooks/useFormState';
 import { produce } from 'immer';
 import { Box, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PasswordField from 'components/ui/fields/PasswordField';
+import { useTranslation } from 'react-i18next';
+import { ErrorMessage } from 'components/ui/text/ErrorMessage';
 
 const schema = yup.object({
   email: yup.string()
-    .required("required")
+    .required('validations.required')
     .trim()
-    .email("email"),
+    .email(),
   password: yup.string()
-    .required("required")
+    .required('validations.required')
     .trim()
-    .matches(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[!?*.(){}[\]\-=+&^%$#@:;`~|\\'""/,><_]).{8,}$/, "char"),
+    .min(8)
+    .matches(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[!?*.(){}[\]\-=+&^%$#@:;`~|\\'""/,><_]).{8,}$/, "validations.passwordCharacters"),
   confirmPassword: yup.string()
-    .required("required")
+    .required('validations.required')
     .trim()
-    .oneOf([yup.ref('password')], "match"),
+    .oneOf([yup.ref('password')], "validations.passwordsNotMatching"),
 }).required();
 
 type FormDataType = yup.InferType<typeof schema>;
 
 const Contact: FC<{onNext: () => void}> = ({onNext}) => {
 
+  const { t } = useTranslation(['register', 'common\\form']);
   const { formState, setFormState } = useFormState();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -67,44 +71,46 @@ const Contact: FC<{onNext: () => void}> = ({onNext}) => {
 
   return (
     <>
-      <div>
-        <h2 className='text-2xl text-center font-bold tracking-tight'>Let's create your account.</h2>
-        <h3 className='text-lg mt-2'>Signing up for MixedDreams is fast and free.</h3>
+      <div className='flex items-center flex-col'>
+        <h2 className='text-2xl text-center font-bold tracking-tight'>{t('title')}</h2>
+        <h3 className='text-lg mt-2'>{t('subTitle')}</h3>
       </div>
       <form className='mt-6'>
         <div className='space-y-4'>
           <TextField {...register("email")}
             fullWidth
-            label="Email*"
+            label={`${t('common\\form:fields.email')}*`}
             error={errors.email !== undefined}
-            helperText={errors.email?.message}
+            helperText={<ErrorMessage error={errors.email?.message} field={t('common\\form:fields.email') as string}/>}
             variant="outlined" />
-          <PasswordField {...register('password')} 
-            error={errors.password?.message} 
+          <PasswordField {...register('password')}
+            error={errors.password !== undefined}
+            helperText={<ErrorMessage error={errors.password?.message} field={t('common\\form:fields.password') as string}/>} 
             showPassword={showPassword}
             onClick={() => setShowPassword((showPassword) => !showPassword)}
-            label='Password*'
+            label={`${t('common\\form:fields.password')}*`}
             isTouched={getFieldState('password').isTouched}/>
           <PasswordField {...register('confirmPassword')} 
-            error={errors.confirmPassword?.message} 
+            error={errors.confirmPassword !== undefined}
+            helperText={<ErrorMessage error={errors.confirmPassword?.message} field={t('common\\form:fields.confirmPassword') as string}/>} 
             showPassword={showPassword}
             onClick={() => setShowPassword((showPassword) => !showPassword)}
-            label='Confirm Password*'
+            label={`${t('common\\form:fields.confirmPassword')}*`}
             isTouched={getFieldState('confirmPassword').isTouched}/>
         </div>
 
       </form>
       <p className='text-left w-full mt-3 text-base'>
-        Already have account?{" "}
+        {t('alreadyHaveAccount')}{" "}
         <Link to={'/login'} className="font-semibold">
-          Sign in
+        {t('common\\form:options.signIn')}
         </Link>
       </p>
-      <Box sx={{width:'100%', marginTop:'10px', justifyContent: 'flex-end', display:'flex'}}>
+      <div className='mt-2 flex justify-end'>
         <Button onClick={() => {updateState(); onNext();}} disabled={!isValid}>
-          Next
+        {t('common\\form:buttons.next')}
         </Button>
-      </Box>
+      </div>
     </>
   );
 }

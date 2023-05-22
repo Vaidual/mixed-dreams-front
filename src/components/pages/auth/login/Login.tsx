@@ -7,17 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { AuthService } from 'services/auth/auth.service';
 import PasswordField from 'components/ui/fields/PasswordField';
-
-const schema = yup.object({
-  email: yup.string()
-    .required("required")
-    .trim(),
-  password: yup.string()
-    .required("required")
-    .trim()
-    .min(8),
-  rememberMe: yup.boolean().required()
-}).required();
+import { useTranslation } from 'react-i18next';
+import { ErrorMessage } from 'components/ui/text/ErrorMessage';
 
 type FormDataType =  {
   email: string
@@ -25,8 +16,20 @@ type FormDataType =  {
   rememberMe: boolean
 }; 
 
-const Login: FC = () => {
+const schema = yup.object({
+    email: yup.string()
+      .required()
+      .trim()
+      .email(),
+    password: yup.string()
+      .required()
+      .trim()
+      .min(8),
+    rememberMe: yup.boolean().required()
+  }).required();
 
+const Login: FC = () => {
+  
   const { register, handleSubmit, getFieldState, formState: { errors } } = useForm<FormDataType>({
     resolver: yupResolver(schema),
     mode: 'onTouched'
@@ -39,12 +42,14 @@ const Login: FC = () => {
     console.log(await AuthService.login(data))
   }
 
+  const { t } = useTranslation(['common\\form', 'login']);
+
   return (
     <>
       <div className='mt-20 mx-auto max-w-sm'>
         <div>
           <h2 className="mt-10 text-center text-2xl font-bold tracking-tight">
-            Sign in to your account
+            {t('login:title')}
           </h2>
         </div>
         <div className='mt-6'>
@@ -52,31 +57,32 @@ const Login: FC = () => {
             <div className='space-y-4'>
               <TextField {...register("email")}
                 fullWidth
-                label="Email*"
+                label={`${t('fields.email')}*`}
                 error={errors.email !== undefined} 
-                helperText={errors.email?.message} 
+                helperText={ <ErrorMessage error={errors.email?.message} field={t('common\\form:ssfields.email') as string}/>} 
                 variant="outlined" />
-              <PasswordField {...register('password')} 
-                error={errors.password?.message} 
+              <PasswordField {...register('password')}
+                error={errors.password !== undefined} 
+                helperText={<ErrorMessage error={errors.password?.message} field={t('fields.password') as string}/>} 
                 showPassword={showPassword}
                 onClick={() => setShowPassword((showPassword) => !showPassword)}
-                label='Password*'
+                label={`${t('fields.password')}*`}
                 isTouched={getFieldState('password').isTouched}/>
               <div className='flex justify-between flex-wrap'>
-                <FormControlLabel className='' {...register("rememberMe")} control={<Checkbox/>} label="Remember me?" />
+                <FormControlLabel {...register("rememberMe")} control={<Checkbox/>} label={t('login:rememberMe')} />
                 <Link className='whitespace-nowrap self-center' to={'#'}>
-                  Forgot password?
+                {t('login:forgotPassword')}
                 </Link>
               </div>
             </div>
             <div className='mt-4'>
-              <Button fullWidth variant='contained' type='submit'>Sign In</Button>
+              <Button fullWidth variant='contained' type='submit'>{t('login:signIn')}</Button>
             </div>
           </form>
           <p className="mt-6 text-center text-base">
-            Not a member?{' '}
+          {t('login:notMember')}{' '}
             <Link color='secondary' to={'/signup'} className="whitespace-nowrap font-semibold leading-6">
-              Create your account
+            {t('login:createAccount')}
             </Link>
           </p>
         </div>

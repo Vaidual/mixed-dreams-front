@@ -1,0 +1,13 @@
+{
+  "steps":{
+    "account": {
+      "label": "Your account"
+    },
+    "business": {
+      "label":"Business information"
+    }
+  },
+  "title": "Let's create your account.",
+  "subTitle": "Signing up for MixedDreams is fast and free.",
+  "alreadyHaveAccount": "Already have account?"
+}

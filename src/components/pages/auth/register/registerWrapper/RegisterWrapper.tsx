@@ -10,6 +10,7 @@ import { produce } from 'immer';
 import { useFormState } from 'hooks/useFormState';
 import { format } from 'date-fns';
 import { useRedirect } from 'hooks/useRedirect';
+import { useTranslation } from 'react-i18next';
 
 export interface IRegisterStepsProps {
   formState: IOptionalRegisterCompany
@@ -62,14 +63,16 @@ const RegisterWrapper: FC = () => {
     redirect()
   }, [formState, redirect, resetFormState]);
   
+
+  const { t } = useTranslation(['register']);
   const registerSteps: FormStepType[] = [
-    {label: 'Your account', element: <Contact onNext={next}/>}, 
-    {label: 'Business information', element: <Business onComplete={onComplete} onPrev={prev}/>}
+    {label: t('steps.account.label'), element: <Contact onNext={next}/>}, 
+    {label: t('steps.business.label'), element: <Business onComplete={onComplete} onPrev={prev}/>}
   ];
 
   return (
     <>
-    <div className='mt-10 mx-auto max-w-lg'>
+    <div className='mx-auto max-w-lg'>
       <Stepper activeStep={formState.selectedIndex}>
         {registerSteps.map((step, index) => (
           <Step key={step.label} completed={index < formState.selectedIndex}>

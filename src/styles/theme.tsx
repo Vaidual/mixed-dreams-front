@@ -37,13 +37,13 @@ export const themeOptions = (mode: ThemeModes) => {
 				  }
 				: {
 						primary: {
-							main: "#fc7a2f"
+							main: "#fc9c2f"
 						},
 						secondary: {
 							main: "#c1358e"
 						},
 						background: {
-							default: "#eeeeee",
+							default: "#fbfbfb",
 							paper: "#F5F5F5",
 							paperHover: "#eeeeee"
 						},
@@ -67,8 +67,18 @@ export const themeOptions = (mode: ThemeModes) => {
 				defaultProps: {
 					LinkComponent: LinkBehavior
 				}
-			}
-		}
+			},
+			MuiOutlinedInput: {
+				styleOverrides: {
+					input: {
+						'&:-webkit-autofill': {
+							'WebkitBoxShadow': `0 0 0 100px ${mode === ThemeModes.Light ? '#fce1ff' : '#5d3a63'} inset`,
+							'WebkitTextFillColor': `${mode === ThemeModes.Light ? '#2e2e2e' : '#f4f4f4'}`
+						}
+					}
+				}
+			},
+		},
 	}
 }
 

@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
-type FormStateType = {
+export type FormStateType = {
   selectedIndex: number,
   steps: {
     account: {
@@ -70,7 +70,7 @@ const DefaultFormState: FormStateType = {
   },
 };
 
-const FormStateContext = createContext({
+export const FormStateContext = createContext({
   formState: DefaultFormState,
   setFormState: (form: FormStateType | ((form: FormStateType) => FormStateType)) => {},
 });
@@ -92,7 +92,7 @@ export function useFormState(): {
     const context = useContext(FormStateContext);
     const resetFormState = () => context.setFormState(DefaultFormState)
     if (!context) {
-      throw new Error("useFormState must be used within the AppProvider");
+      throw new Error("useFormState must be used within the FormProvider");
     }
 
     return {resetFormState, ...context};

@@ -1,0 +1,35 @@
+{
+  "fields":{
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "confirmPassword":"Повторіть пароль",
+    "businessName": "Назва бізнесу",
+    "birthday": "Дата народження",
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "address":{
+      "country":"Країна",
+      "street":"Вулиця",
+      "state":"Область/Штат",
+      "city":"Місто",
+      "zipCode":"Поштовий Код",
+      "apartment":"Квартира"
+    }
+  },
+  "validations": {
+    "required": "Обов'язкове поле",
+    "emailFormat":"Неправильний формат електронної пошти",
+    "minString":"{{field}} має містити не менше {{min}} символів",
+    "maxString":"{{field}} має містити не більше {{max}} символів",
+    "passwordCharacters": "Пароль повинен містити принаймні один верхній, нижній та спеціальний символ",
+    "passwordsNotMatching": "Паролі не збігаються"
+  },
+  "options": {
+    "signIn":"Увійти"
+  },
+  "buttons":{
+    "next": "Далі",
+    "prev": "Назад",
+    "finish": "Закінчити"
+  }
+}
