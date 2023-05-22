@@ -7,7 +7,7 @@ import App from './App';
 import ErrorPage from './components/pages/error/Error';
 import Home from './components/pages/home/Home';
 import Login from './components/pages/auth/login/Login';
-import { StyledEngineProvider } from '@mui/material/styles';
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import RegisterWrapper from 'components/pages/auth/register/registerWrapper/RegisterWrapper';
 import AuthForm from 'components/pages/auth/form/AuthForm';
 import { FormProvider } from 'hooks/useFormState';
@@ -48,9 +48,9 @@ root.render(
   <React.StrictMode>
     <StyledEngineProvider injectFirst>
       <FormProvider>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <RouterProvider router={router}/>
-      </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <RouterProvider router={router}/>
+        </LocalizationProvider>
       </FormProvider>
     </StyledEngineProvider>
   </React.StrictMode>

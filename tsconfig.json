@@ -20,9 +20,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "src",
-
+    "paths": {
+      //"@/*": ["./*"]
+    }
   },
   "include": [
     "src"
-  ]
+,   "tailwind.config.js", "tailwind.config.js"  ]
 }

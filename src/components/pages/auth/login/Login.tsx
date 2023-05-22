@@ -62,8 +62,8 @@ const Login: FC = () => {
                 onClick={() => setShowPassword((showPassword) => !showPassword)}
                 label='Password*'
                 isTouched={getFieldState('password').isTouched}/>
-              <div className='flex justify-between'>
-                <FormControlLabel {...register("rememberMe")} control={<Checkbox/>} label="Remember me?" />
+              <div className='flex justify-between flex-wrap'>
+                <FormControlLabel className='' {...register("rememberMe")} control={<Checkbox/>} label="Remember me?" />
                 <Link className='whitespace-nowrap self-center' to={'#'}>
                   Forgot password?
                 </Link>
@@ -75,7 +75,7 @@ const Login: FC = () => {
           </form>
           <p className="mt-6 text-center text-base">
             Not a member?{' '}
-            <Link to={'/signup'} className="whitespace-nowrap font-semibold leading-6">
+            <Link color='secondary' to={'/signup'} className="whitespace-nowrap font-semibold leading-6">
               Create your account
             </Link>
           </p>

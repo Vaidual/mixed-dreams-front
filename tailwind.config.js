@@ -1,8 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  corePlugins: {
+    preflight: false,
+  },
+  important: '#root',
   plugins: [
     require('prettier-plugin-tailwindcss'),
-    require('@tailwindcss/forms'),
+    require("daisyui"),
+    //require('@tailwindcss/forms'),
   ],
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -10,6 +15,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
+
 }
 
