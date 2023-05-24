@@ -23,7 +23,6 @@ export const login = createAsyncThunk<IAuthResponse, ILogin>(
           const response = await AuthService.login(data)
           return response
       } catch(e) {
-        console.log(e)
           return thunkAPI.rejectWithValue(e);
       }
   }

@@ -16,7 +16,6 @@ import { useTranslation } from "react-i18next"
 import Language from "types/Languge"
 import LanguageIcon from "@mui/icons-material/Language"
 import { useAppSelector } from "hooks/userAppSelector"
-import { AuthService } from "services/auth/auth.service"
 import { logout } from "store/user/user.slice"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "store/store"
@@ -49,7 +48,7 @@ const Header: FC = () => {
 		<header className="w-full border-b border-gray-400 fixed inset-x-0 top-0 z-50">
 			<div className="max-width-container">
 				<nav
-					className="flex w-full items-center justify-between p-6 lg:px-8"
+					className="flex w-full items-center justify-between p-4 lg:px-8"
 					aria-label="Global"
 				>
 					<div className="">

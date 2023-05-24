@@ -12,8 +12,8 @@ export const ErrorMessage = ({ error, field }: ErrorMessageProps) => {
   if (error === undefined) {
       return <></>;
   } else if (typeof error === 'string') {
-      return <span className="error-text">{getTranslate(error)}</span>;
+      return <span className="form-error">{getTranslate(error)}</span>;
   } else {
-      return <span className="error-text">{getTranslate(error.key, {...error.values, field })}</span>;
+      return <span className="form-error">{getTranslate(error.key, {...error.values, field })}</span>;
   }
 };
