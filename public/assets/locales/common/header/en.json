@@ -5,6 +5,7 @@
     "tryNow": "Try now"
   },
   "actions": {
-    "logIn":"Log in"
+    "logIn":"Log in",
+    "logout":"Logout"
   }
 }

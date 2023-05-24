@@ -18,6 +18,7 @@
   },
   "validations": {
     "required": "Required",
+    "zipCodeFormat": "Post Code must contain 4 or 5 digits",
     "emailFormat":"Incorrect email format",
     "minString":"{{field}} must be at least {{min}} characters",
     "maxString":"{{field}} must be maximum {{max}} characters",

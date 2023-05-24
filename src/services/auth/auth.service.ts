@@ -1,24 +1,36 @@
 import { instance } from "api/api.interceptor";
-import { ILogin, IRegisterCompany, IToken } from "interfaces/auth.interface";
+import { IAuthResponse, ILogin, IRegisterCompany, ITokens } from "interfaces/auth.interface";
+import { removeAuthDataFromStorage, saveAuthDataToStorage } from "./auth.helper";
+import { IResponseError } from "interfaces/responseError.interface";
 
 export const AuthService = {
   async registerCompany(data: IRegisterCompany) {
-    const response = await instance<IToken>({
+    const response = await instance<IAuthResponse>({
       url: '/auth/register/company',
       method: 'POST',
       data
     })
 
-    return response.data as IToken
+    saveAuthDataToStorage(response.data);
+    
+    return response.data
   },
 
   async login(data: ILogin) {
-    const response = await instance<IToken>({
+    const response = await instance<IAuthResponse>({
       url: '/auth/login',
       method: 'POST',
       data
     })
 
-    return response.data as IToken
-  }
+    if(response.data?.tokens) {
+      saveAuthDataToStorage(response.data);
+    }
+
+    return response.data
+  },
+
+  logout() {
+    removeAuthDataFromStorage()
+  },
 }

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { errorCatch } from "./api.helper";
 import { getAccessToken, removeTokens } from "services/auth/auth.helper";
 
@@ -7,6 +7,7 @@ export const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
+
   const accessToken = getAccessToken()
 
   if (config.headers && accessToken) {
@@ -18,17 +19,11 @@ instance.interceptors.request.use(config => {
 
 instance.interceptors.response.use(
   response => response,
-  async error => {
-    const originalRequest = error.config
+  async (error: AxiosError) => {
 
-    if (
-      error.response.status === 401 && 
-      error.config && 
-      !error.config._isRetry
-    ) {
-        originalRequest._isRetry = true
+    if (error.response?.status === 401) {
         removeTokens()
       }
 
-  return error
+  return Promise.reject(error.response?.data ?? error);
 })

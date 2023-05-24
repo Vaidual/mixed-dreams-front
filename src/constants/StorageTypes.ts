@@ -1,3 +1,4 @@
 export default class StorageTypes {
-  public static readonly themeMode = "themeMode"
+  public static readonly ThemeMode = "themeMode"
+  public static readonly User = "user"
 }

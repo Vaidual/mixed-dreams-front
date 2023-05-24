@@ -1,0 +1,11 @@
+{
+  "InternalError":"Something went wrong. Try again or call a manager.",
+  "EmailIsTaken":"Email is already taken.",
+  "LargeOrder":"The order is too large. Try to message a product owner for details.",
+  "PeriodDoesntExist" :"Provided period is incorrect.",
+  "PropertyIsTaken" :"Provided property name is already taken.",
+  "EntityNotFound" :"Resource is not found.",
+  "InvalidCredentials"  :"Provided credentials are invalid.",
+  "ParsingError" :"One of provided values has invalid format.",
+  "ModelValidationError" :"Provided data has invalid format."
+}

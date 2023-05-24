@@ -88,7 +88,7 @@ export const ColorModeContext = createContext({
 
 export const useToggleMode = () => {
 	let preferredMode: ThemeModes = localStorage.getItem(
-		StorageTypes.themeMode
+		StorageTypes.ThemeMode
 	) as ThemeModes
 	if (!preferredMode)
 		preferredMode = window.matchMedia("(prefers-color-scheme: dark)")
@@ -100,7 +100,7 @@ export const useToggleMode = () => {
 		() => ({
 			toggleColorMode: () => setMode((prevMode) => {
 				const newMode = prevMode === ThemeModes.Light ? ThemeModes.Dark : ThemeModes.Light
-				localStorage.setItem(StorageTypes.themeMode, newMode)
+				localStorage.setItem(StorageTypes.ThemeMode, newMode)
 				return newMode
 			})
 	})

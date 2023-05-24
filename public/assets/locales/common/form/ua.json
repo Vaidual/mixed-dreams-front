@@ -22,7 +22,8 @@
     "minString":"{{field}} має містити не менше {{min}} символів",
     "maxString":"{{field}} має містити не більше {{max}} символів",
     "passwordCharacters": "Пароль повинен містити принаймні один верхній, нижній та спеціальний символ",
-    "passwordsNotMatching": "Паролі не збігаються"
+    "passwordsNotMatching": "Паролі не збігаються",
+    "zipCodeFormat": "Поштовий індекс повинен містити 4 або 5 цифр"
   },
   "options": {
     "signIn":"Увійти"

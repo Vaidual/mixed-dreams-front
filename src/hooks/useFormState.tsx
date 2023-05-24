@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
 export type FormStateType = {
+  complete: boolean,
   selectedIndex: number,
   steps: {
     account: {
@@ -36,6 +37,7 @@ export type FormStateType = {
 };
 
 const DefaultFormState: FormStateType = {
+  complete: false,
   selectedIndex: 0,
   steps: {
     account: {

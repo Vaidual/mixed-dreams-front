@@ -12,7 +12,7 @@ export interface IRegisterCompany {
 
 export interface IOptionalRegisterCompany extends Partial<IRegisterCompany> {}
 
-export interface IToken {
+export interface ITokens {
   accessToken: string
 }
 
@@ -20,4 +20,15 @@ export interface ILogin {
   email: string,
   password: string,
   rememberMe: boolean,
+}
+
+export interface IAuthResponse {
+  user: IUser,
+  tokens: ITokens
+}
+
+export interface IUser {
+  firstName: string,
+  lastName: string,
+  email: string,
 }

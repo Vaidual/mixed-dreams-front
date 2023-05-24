@@ -1,5 +1,5 @@
 import { Button, Checkbox, TextField } from '@mui/material'
-import { FC, useState } from 'react'
+import { FC, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom'
 import * as yup from 'yup'
@@ -9,6 +9,13 @@ import { AuthService } from 'services/auth/auth.service';
 import PasswordField from 'components/ui/fields/PasswordField';
 import { useTranslation } from 'react-i18next';
 import { ErrorMessage } from 'components/ui/text/ErrorMessage';
+import { login } from 'store/user/user.actions';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'store/store';
+import { SnackbarContext } from 'providers/Snackbar.provider';
+import { useRedirect } from 'hooks/useRedirect';
+import { IStandardError } from 'interfaces/responseError.interface';
+import { ErrorCodes } from 'enums/ErrorCodes';
 
 type FormDataType =  {
   email: string
@@ -37,12 +44,19 @@ const Login: FC = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const { t } = useTranslation(['common\\form', 'login','common\\errors']);
+  const dispatch = useDispatch<AppDispatch>();
+  const redirect = useRedirect();
+  const { setSnack } = useContext(SnackbarContext);
   const onSubmit = async (data: FormDataType) => {
-    console.log(data)
-    console.log(await AuthService.login(data))
+    try {
+      await dispatch(login(data)).unwrap()
+      redirect()
+    } catch (e) {
+      const error = e as IStandardError;
+      setSnack({ message: t(`common\\errors:${ErrorCodes[error.errorCode]}`), color: 'error', open: true })
+    }
   }
-
-  const { t } = useTranslation(['common\\form', 'login']);
 
   return (
     <>

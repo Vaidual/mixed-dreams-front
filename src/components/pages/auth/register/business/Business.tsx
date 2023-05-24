@@ -5,10 +5,9 @@ import TextField from '@mui/material/TextField';
 import { Controller, useForm } from 'react-hook-form';
 import { useFormState } from 'hooks/useFormState';
 import { produce } from 'immer';
-import { Box, Button } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { isValid as isDateValid } from 'date-fns';
-import styles from "./Business.module.css";
 import { useTranslation } from 'react-i18next';
 import { ErrorMessage } from 'components/ui/text/ErrorMessage';
 
@@ -58,7 +57,7 @@ const schema = yup.object().shape({
   zipCode: yup.string()
     .required()
     .trim()
-    .matches(/^[0-9]{5}(?:-[0-9]{4})?$/),
+    .matches(/^[0-9]{5}(?:-[0-9]{4})?$/, 'validations.zipCodeFormat'),
   state: yup.string()
     .required()
     .trim()
@@ -84,7 +83,7 @@ const schema = yup.object().shape({
 
 type FormData = yup.InferType<typeof schema>;
 
-const Business: FC<{onComplete: () => void; onPrev: () => void;}> = ({onPrev, onComplete}) => {
+const Business: FC<{onComplete: () => void;onPrev: () => void; isLoading: boolean}> = ({onPrev, isLoading, onComplete}) => {
 
   const { formState, setFormState } = useFormState();
 
@@ -131,9 +130,15 @@ const Business: FC<{onComplete: () => void; onPrev: () => void;}> = ({onPrev, on
         formState.steps.business.valid = isValid;
         formState.steps.business.dirty = false;
         formState.steps.business.hadError = Object.entries(errors).length > 0;
+        formState.complete = true;
       })
     );
   }
+
+  useEffect(() => {
+    if (formState.complete === true)
+      onComplete()
+  },[formState.complete])
 
   const { t } = useTranslation(['common\\form', 'register']);
 
@@ -226,8 +231,8 @@ const Business: FC<{onComplete: () => void; onPrev: () => void;}> = ({onPrev, on
         <Button onClick={() => {updateState(); onPrev();}}>
           {t("buttons.prev")}
         </Button>
-        <Button onClick={() => {updateState(); onComplete();}} disabled={!isValid}>
-          {t("buttons.finish")}
+        <Button onClick={() => {updateState();}} disabled={!isValid || isLoading}>
+          {isLoading ? <CircularProgress color={"secondary"} size={'30px'}/> : t("buttons.finish")}
         </Button>
       </Box>
       </>
