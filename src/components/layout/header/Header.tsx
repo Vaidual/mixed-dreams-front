@@ -46,8 +46,8 @@ const Header: FC = () => {
 	}
 
 	return (
-		<header className="w-full border-b border-gray-400 fixed">
-			<div className="max-width-container inset-x-0 top-0 z-50">
+		<header className="w-full border-b border-gray-400 fixed inset-x-0 top-0 z-50">
+			<div className="max-width-container">
 				<nav
 					className="flex w-full items-center justify-between p-6 lg:px-8"
 					aria-label="Global"

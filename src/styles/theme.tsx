@@ -77,7 +77,7 @@ export const themeOptions = (mode: ThemeModes) => {
 						}
 					}
 				}
-			},
+			}
 		},
 	}
 }
