@@ -118,7 +118,7 @@ const Login: FC = () => {
 									helperText={
 										<ErrorMessage
 											error={errors.email?.message}
-											field={t("common\form:ssfields.email") as string}
+											field={t("common\form:fields.email") as string}
 										/>
 									}
 									variant="outlined"

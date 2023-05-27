@@ -32,7 +32,7 @@ export interface ProductWithDetails {
   name: string,
   description: string,
   price: number | null,
-  amountInStock: number,
+  amountInStock: null,
   visibility: Visibility,
   primaryImage: string | null,
   recommendedTemperature: number | null,

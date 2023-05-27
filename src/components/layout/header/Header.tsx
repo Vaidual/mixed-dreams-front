@@ -43,7 +43,6 @@ const Header: FC = () => {
 	const handleLogout = () => {
 		dispatch(logout())
 	}
-
 	return (
 		<header className="w-full border-b border-gray-400 fixed inset-x-0 top-0 z-50">
 			<div className="max-width-container">
