@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
 export type FormStateType = {
-  complete: boolean,
   selectedIndex: number,
   steps: {
     account: {
@@ -19,7 +18,7 @@ export type FormStateType = {
       valid: boolean,
       dirty: boolean,
       value: {
-        birthday: Date | null,
+        birthday?: Date,
         companyName: string,
         firstName: string,
         lastName: string,
@@ -37,7 +36,6 @@ export type FormStateType = {
 };
 
 const DefaultFormState: FormStateType = {
-  complete: false,
   selectedIndex: 0,
   steps: {
     account: {
@@ -55,7 +53,7 @@ const DefaultFormState: FormStateType = {
       valid: false,
       dirty: false,
       value: {
-        birthday: null,
+        birthday: undefined,
         companyName: '',
         firstName: '',
         lastName: '',

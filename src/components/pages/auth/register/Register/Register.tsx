@@ -64,9 +64,8 @@ const RegisterWrapper: FC = () => {
   const redirect = useRedirect();
   const dispatch = useDispatch<AppDispatch>();
   const { setSnack } = useContext(SnackbarContext);
+
   const onComplete = useCallback(async () => {
-    if (formState.complete !== true) return;
-    setFormState({ ...formState, complete: false })
     const { birthday, firstName, lastName, companyName, ...address } = formState.steps.business.value;
     const data: IRegisterCompany =
     {
@@ -85,19 +84,13 @@ const RegisterWrapper: FC = () => {
       const error = e as IStandardError;
       setSnack({ message: t(`common\\errors:${ErrorCodes[error.errorCode]}`), color: 'error', open: true })
     }
-  }, [dispatch, redirect, resetFormState, t, formState, setFormState, setSnack]);
+  }, [dispatch, redirect, resetFormState, t, setSnack, formState.steps.account.value, formState.steps.business.value]);
 
   const registerSteps: FormStepType[] = [
     { label: t('steps.account.label'), element: <Contact onNext={next} /> },
     { label: t('steps.business.label'), element: <Business onPrev={prev} onComplete={onComplete} isLoading={isLoading} /> }
   ];
 
-  // useEffect(() => {
-  //   console.log(formState.complete)
-  //   if (formState.complete === true) {
-  //     onComplete();
-  //   }
-  // }, [formState.complete, onComplete]);
   return (
     <>
       <div className='mx-auto max-w-lg'>

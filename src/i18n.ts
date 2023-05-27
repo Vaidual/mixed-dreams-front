@@ -2,12 +2,20 @@ import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 import Backend from "i18next-http-backend"
+import { format as formatDate} from 'date-fns';
 
 i18n
 	.use(initReactI18next)
 	.use(LanguageDetector)
 	.use(Backend)
 	.init({
+		interpolation: {
+			format: function(value, format) {
+				console.log(value)
+				if (format === 'dateFormat') return formatDate(value, 'yyyy-MM-dd');
+				return value;
+			}
+		},
 		supportedLngs: ["en", "ua"],
 		fallbackLng: "ua",
 		detection: {

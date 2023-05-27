@@ -24,15 +24,14 @@ export const SnackbarContext = createContext<SnackDefaultValue>({snack: DefaultS
 
 export function SnackbarProvider({ children }: { children: ReactNode }) {
   const [snack, setSnack] = useState(DefaultSnack);
-  const [isOpen, setisOpen] = useState(false);
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setSnack((prev) => ({...prev, open: false}));
   };
+
   return (
     <SnackbarContext.Provider value={{snack, setSnack}}>
       {children}

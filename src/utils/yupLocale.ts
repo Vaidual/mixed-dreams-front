@@ -25,6 +25,14 @@ export const yupLocale = {
           values: { max },
       }),
   },
-  number: {},
-  boolean: {},
+  date: {
+    min: ({ min }) => ({
+        key: 'validations.minDate',
+        values: { min },
+    }),
+    max: ({ max }) => ({
+        key: 'validations.maxDate',
+        values: { max },
+    })
+  }
 };

@@ -18,10 +18,13 @@
   },
   "validations": {
     "required": "Required",
+    "dateType": "Invalid date format",
     "zipCodeFormat": "Post Code must contain 4 or 5 digits",
     "emailFormat":"Incorrect email format",
     "minString":"{{field}} must be at least {{min}} characters",
     "maxString":"{{field}} must be maximum {{max}} characters",
+    "minDate":"{{field}} must be at least {{min, dateFormat}}",
+    "maxDate":"{{field}} must be no more than {{max, dateFormat}}",
     "passwordCharacters": "Password must contain al least one upper, lower and special character",
     "passwordsNotMatching": "Passwords don't match"
   },

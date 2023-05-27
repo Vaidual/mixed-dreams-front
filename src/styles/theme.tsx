@@ -23,34 +23,34 @@ export const themeOptions = (mode: ThemeModes) => {
 			mode,
 			...(mode === ThemeModes.Dark
 				? {
-						primary: {
-							main: "#ed884e"
-						},
-						secondary: {
-							main: "#ba68c8"
-						},
-						background: {
-							default: "#2d282b",
-							paper: "#1a1a1b",
-							paperHover: "#303030"
-						}
-				  }
+					primary: {
+						main: "#ed884e"
+					},
+					secondary: {
+						main: "#ba68c8"
+					},
+					background: {
+						default: "#2d282b",
+						paper: "#1a1a1b",
+						paperHover: "#303030"
+					}
+				}
 				: {
-						primary: {
-							main: "#fc9c2f"
-						},
-						secondary: {
-							main: "#c1358e"
-						},
-						background: {
-							default: "#fbfbfb",
-							paper: "#F5F5F5",
-							paperHover: "#eeeeee"
-						},
-						text: {
-							grey: "#a0a0a0"
-						}
-				  })
+					primary: {
+						main: "#fc9c2f"
+					},
+					secondary: {
+						main: "#c1358e"
+					},
+					background: {
+						default: "#fbfbfb",
+						paper: "#F5F5F5",
+						paperHover: "#eeeeee"
+					},
+					text: {
+						grey: "#a0a0a0"
+					}
+				})
 		},
 		typography: {
 			button: {
@@ -77,13 +77,33 @@ export const themeOptions = (mode: ThemeModes) => {
 						}
 					}
 				}
-			}
+			},
+			MuiPopover: {
+				defaultProps: {
+					container: document.getElementById("root"),
+				},
+			},
+			MuiPopper: {
+				defaultProps: {
+					container: document.getElementById("root"),
+				},
+			},
+			MuiDialog: {
+				defaultProps: {
+					container: document.getElementById("root"),
+				},
+			},
+			MuiModal: {
+				defaultProps: {
+					container: document.getElementById("root"),
+				},
+			},
 		},
 	}
 }
 
 export const ColorModeContext = createContext({
-	toggleColorMode: () => {}
+	toggleColorMode: () => { }
 })
 
 export const useToggleMode = () => {
@@ -103,8 +123,8 @@ export const useToggleMode = () => {
 				localStorage.setItem(StorageTypes.ThemeMode, newMode)
 				return newMode
 			})
-	})
-	,[])
+		})
+		, [])
 
 	const theme = useMemo(
 		() => createTheme(themeOptions(mode) as ThemeOptions),

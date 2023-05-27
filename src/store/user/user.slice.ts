@@ -17,7 +17,7 @@ export const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
-      removeAuthDataFromStorage()
+      //removeAuthDataFromStorage()
   }
   },
   extraReducers: builder => {

@@ -19,11 +19,14 @@
   "validations": {
     "required": "Обов'язкове поле",
     "emailFormat":"Неправильний формат електронної пошти",
-    "minString":"{{field}} має містити не менше {{min}} символів",
-    "maxString":"{{field}} має містити не більше {{max}} символів",
+    "minString":"{{field}} має містити не менше {{min, dateFormat}}} символів",
+    "maxString":"{{field}} має містити не більше {{max, dateFormat}}} символів",
     "passwordCharacters": "Пароль повинен містити принаймні один верхній, нижній та спеціальний символ",
     "passwordsNotMatching": "Паролі не збігаються",
-    "zipCodeFormat": "Поштовий індекс повинен містити 4 або 5 цифр"
+    "zipCodeFormat": "Поштовий індекс повинен містити 4 або 5 цифр",
+    "dateType": "Неправильний формат дати",
+    "minDate":"{{field}} повинен бути не менше {{min, datetime}}",
+    "maxDate":"{{field}} має бути не більше ніж {{max, datetime}}"
   },
   "options": {
     "signIn":"Увійти"
