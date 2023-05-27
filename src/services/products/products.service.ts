@@ -1,5 +1,5 @@
 import { instance } from "api/api.interceptor";
-import { CompanyProduct, PostPutProduct, ProductWithDetails } from "interfaces/product.interface";
+import { CompanyProduct, PostProduct, ProductCategory, ProductWithDetails, PutProduct } from "interfaces/product.interface";
 
 export const ProductService = {
   async getCompanyProducts() {
@@ -29,7 +29,16 @@ export const ProductService = {
     return response.data
   },
 
-  async createProduct(product: PostPutProduct) {
+  async getProductCategories() {
+    const response = await instance<ProductCategory[]>({
+      url: `/products/categories`,
+      method: 'get',
+    })
+
+    return response.data
+  },
+
+  async createProduct(product: PostProduct) {
     const response = await instance({
       url: `/products`,
       method: 'post',
@@ -40,7 +49,7 @@ export const ProductService = {
     return response.data
   },
 
-  async updateProduct(id: string, product: PostPutProduct) {
+  async updateProduct(id: string, product: PutProduct) {
     const response = await instance<null>({
       url: `/products/${id}`,
       method: 'put',

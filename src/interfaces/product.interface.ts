@@ -7,20 +7,42 @@ export interface CompanyProduct {
   amountInStock: number,
 }
 
-export interface PostPutProduct {
+export interface PostProduct {
   name: string,
   description: string,
   price: number,
   amountInStock: number,
   visibility: Visibility,
-  primaryImage: object,
+  primaryImage: File | null,
   recommendedTemperature: number,
   recommendedHumidity: number,
-  ingredients?: ProductIngredient[]
+  ingredients?: PostProductIngredient[]
   productCategory: string
 }
 
-export interface ProductIngredient {
+export interface PutProduct {
+  name: string,
+  changeImage: boolean,
+  description: string,
+  price: number,
+  amountInStock: number,
+  visibility: Visibility,
+  primaryImage: File | null,
+  recommendedTemperature: number,
+  recommendedHumidity: number,
+  ingredients?: PostProductIngredient[]
+  productCategory: string
+}
+
+export interface GetProductIngredient {
+  id: string,
+  name: string,
+  hasAmount: boolean,
+  amount?: number,
+  unit?: number,
+}
+
+export interface PostProductIngredient {
   id: string,
   hasAmount: boolean,
   amount?: number,
@@ -32,11 +54,16 @@ export interface ProductWithDetails {
   name: string,
   description: string,
   price: number | null,
-  amountInStock: null,
+  amountInStock: number | null,
   visibility: Visibility,
   primaryImage: string | null,
   recommendedTemperature: number | null,
   recommendedHumidity: number | null,
-  ingredients: ProductIngredient[]
+  ingredients: GetProductIngredient[]
   productCategory: string | null
+}
+
+export interface ProductCategory {
+  id: string,
+  name: string,
 }
