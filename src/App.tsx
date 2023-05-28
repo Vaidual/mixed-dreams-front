@@ -15,18 +15,19 @@ import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "store/store"
 import { logout } from "store/user/user.slice"
+import _ from "underscore"
+
 
 function App() {
 	const { theme, toggleColorMode } = useToggleMode()
-	const roles = useAppSelector((state) => state.user.user?.roles);
 
 	const dispatch = useDispatch<AppDispatch>();
 	const [authToken, setAuthToken] = useState(Cookies.get(CookiesTypes.AccessToken));
-  useEffect(() => {
-    if (authToken === undefined) {
+	useEffect(() => {
+		if (authToken === undefined) {
 			dispatch(logout())
 		}
-  }, [authToken, dispatch]);
+	}, [authToken, dispatch]);
 
 	return (
 		<StyledEngineProvider injectFirst>
@@ -38,7 +39,7 @@ function App() {
 							<div className="App flex flex-row h-full">
 								<Header />
 								<div className="flex pt-[72px] w-full">
-									{roles?.some(role => [Roles.Company].includes(role)) && <Sidebar />}
+									<Sidebar />
 									<main className="flex max-width-container px-4 pt-10 flex-grow justify-center">
 										<Outlet />
 									</main>

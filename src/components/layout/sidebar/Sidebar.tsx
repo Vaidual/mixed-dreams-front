@@ -6,6 +6,9 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import { useTheme } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import { useAppSelector } from 'hooks/userAppSelector';
+import Roles from 'constants/Roles';
+import EggIcon from '@mui/icons-material/Egg';
 
 type Item = {
   label: string,
@@ -14,12 +17,17 @@ type Item = {
 }
 
 const Sidebar: FC = () => {
+  const roles = useAppSelector((state) => state.user.user?.roles);
   const theme = useTheme();
-
   const location = useLocation();
+
+  if (!roles?.some(role => [Roles.Company].includes(role))) {
+    return null;
+  }
 
   const menuItems: Item[] = [
     { label: "Products", to: "/products", icon: <SellIcon /> },
+    { label: "Ingredients", to: "/ingredients", icon: <EggIcon /> },
     { label: "Orders", to: "/orders", icon: <ReceiptIcon /> },
     { label: "Statistic", to: "/statistic", icon: <BarChartIcon /> },
     { label: "Locations", to: "/locations", icon: <StorefrontIcon /> }

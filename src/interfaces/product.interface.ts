@@ -38,15 +38,15 @@ export interface GetProductIngredient {
   id: string,
   name: string,
   hasAmount: boolean,
-  amount?: number,
-  unit?: number,
+  amount?: number | null,
+  unit?: number | null,
 }
 
 export interface PostProductIngredient {
   id: string,
   hasAmount: boolean,
-  amount?: number,
-  unit?: number,
+  amount?: number | null,
+  unit?: number | null,
 }
 
 export interface ProductWithDetails {

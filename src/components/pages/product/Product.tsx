@@ -1,10 +1,10 @@
-import { AppBar, Autocomplete, Box, Button, ButtonBase, Dialog, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, SvgIcon, TextField, Toolbar, Typography, useTheme } from '@mui/material'
+import { AppBar, Autocomplete, Box, Button, ButtonBase, Checkbox, Dialog, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, SvgIcon, TextField, Toolbar, Tooltip, Typography, useTheme } from '@mui/material'
 import { FC, ReactNode, forwardRef, useContext, useEffect, useMemo, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SnackbarContext } from 'providers/Snackbar.provider';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ProductService } from 'services/products/products.service';
 import { ErrorCodes } from 'enums/ErrorCodes';
 import { IStandardError } from 'interfaces/responseError.interface';
@@ -15,7 +15,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { FileUpload } from 'components/ui/fileUpload/FileUpload';
 import { ErrorMessage } from 'components/ui/text/ErrorMessage';
-import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import MaterialReactTable, { MRT_ColumnDef, MaterialReactTableProps } from 'material-react-table';
+import { useMaterialReactTableLocalization } from 'hooks/useMaterialReactTableLocalization';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { LoadingButton } from '@mui/lab';
+import ConfirmDialog from 'components/ui/dialogs/ConfirmDialog';
+import AddIngredientModal from 'components/ui/add-ingredient/AddIngredientModal';
+import useUnitItems from 'components/ui/add-ingredient/UnitsItems';
+import { Delete, Edit } from '@mui/icons-material';
 
 interface FormProductType extends Omit<ProductWithDetails, "id"> {
   id: string | null,
@@ -53,8 +60,9 @@ const schema = yup.object().shape({
     .transform((value) => (isNaN(value) ? null : value))
     .nullable(),
   visibility: yup.mixed<Visibility>()
-    .oneOf(Object.values(Visibility) as Visibility[])
-    .required(),
+    .required()
+    .oneOf(Object.values(Visibility) as Visibility[]),
+
   recommendedTemperature: yup.number()
     .required()
     .transform((value) => (isNaN(value) ? null : value))
@@ -73,6 +81,7 @@ const schema = yup.object().shape({
 type FormData = yup.InferType<typeof schema>;
 
 const Product: FC = () => {
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(true);
   const { t } = useTranslation(['products', 'common\\errors']);
 
@@ -93,12 +102,19 @@ const Product: FC = () => {
     enabled: isEditing
   });
 
+
+
   const categories = useQuery<ReadonlyArray<ProductCategory>>(['getProductCategories'], () => {
     return ProductService.getProductCategories();
+  }, {
+    cacheTime: 60 * 60 * 1000,
+    staleTime: 10 * 60 * 1000
   });
+  
 
   useEffect(() => {
     if (data) {
+      console.log(data)
       setProduct(data)
     }
   }, [data]);
@@ -122,35 +138,71 @@ const Product: FC = () => {
     setImage(null);
   }
 
+
+  const [productIngredients, setProductIngredients] = useState<Array<GetProductIngredient>>(product.ingredients);
+
+  const createProduct = useMutation(['createProduct'], (product: PostProduct) => {
+    return ProductService.createProduct(product);
+  }, {
+    onSuccess(newIngredient) {
+      if (image?.object) {
+        URL.revokeObjectURL(image.url);
+      }
+      queryClient.invalidateQueries({ queryKey: ['getCompanyProducts'] })
+      handleClose();
+    },
+    onError(postError) {
+      setSnack({ message: t(`${ErrorCodes[(postError as IStandardError)?.errorCode]}`), color: 'error', open: true, autoHideDuration: 10_000 });
+    }
+  });
   const onSubmit: SubmitHandler<SchemaType> = data => {
     if (isEditing) {
-      console.log({ ...data, 
-        primaryImage: image?.url === product.primaryImage || image === null ? null : image.object, 
+      console.log({
+        ...data,
+        description: data.description === null ? ' ' : data.description,
+        primaryImage: image?.url === product.primaryImage || image === null ? null : image.object,
         changeImage: image?.url !== product.primaryImage,
-        ingredients: product.ingredients.map<PostProductIngredient>((i) => { return { 
-          id: i.id, 
-          hasAmount: i.hasAmount, 
-          unit: i.unit, 
-          amount: i.amount } 
+        ingredients: productIngredients.map<PostProductIngredient>((i) => {
+          return {
+            id: i.id,
+            hasAmount: i.hasAmount,
+            unit: i.unit,
+            amount: i.amount
+          }
         }),
         productCategory: category?.id ?? null
       } as PutProduct);
     } else {
-      console.log({ ...data, 
-        primaryImage: image === null ? null : image.object, 
-        ingredients: product.ingredients.map<PostProductIngredient>((i) => { return { 
-          id: i.id, 
-          hasAmount: i.hasAmount, 
-          unit: i.unit, 
-          amount: i.amount } 
+      const postProduct = {
+        ...data,
+        description: data.description === null ? ' ' : data.description,
+        primaryImage: image === null ? null : image.object,
+        ingredients: productIngredients.map<PostProductIngredient>((i) => {
+          return {
+            id: i.id,
+            hasAmount: i.hasAmount,
+            unit: i.unit,
+            amount: i.amount
+          }
         }),
         productCategory: category?.id ?? null
-      } as PostProduct);
-      if (image?.object) {
-        URL.revokeObjectURL(image.url);
-      }
-    }
+      } as PostProduct;
 
+      createProduct.mutate(postProduct)
+    }
+  }
+
+  const handleAddIngredient = (newIngredient: GetProductIngredient) => {
+    setProductIngredients((prev) => [newIngredient, ...prev])
+  }
+
+  const handleDeleteIngredient = (id: string) => {
+    setProductIngredients((prev) => prev.filter(function (ing) {
+      return ing.id !== id;
+    }))
+  }
+  const handleUpdateIngredients = (ingredients: GetProductIngredient[]) => {
+    setProductIngredients(ingredients);
   }
 
   const { palette } = useTheme();
@@ -163,7 +215,7 @@ const Product: FC = () => {
       open={open}
       onClose={handleClose}
     >
-      <AppBar color='default' sx={{ position: 'relative' }}>
+      <AppBar className='fixed' color='default' sx={{ position: 'relative' }}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -179,6 +231,7 @@ const Product: FC = () => {
           </Button>
         </Toolbar>
       </AppBar>
+      {isEditing && !isLoading &&
       <div className='max-w-2xl mx-auto w-full mt-10'>
         <section className='flex flex-col space-y-5 mb-10'>
           <SectionTitle title={'Details'} />
@@ -209,20 +262,6 @@ const Product: FC = () => {
                   />
                 }
               />
-              {/* <Autocomplete {...register('productCategory')}
-                onChange={(e) => {
-                  console.log(e)
-                }}
-                getOptionLabel={option => option.name}
-                options={categories.data ?? []}
-                renderInput={(params) =>
-                  <TextField {...params}
-                    label="Category"
-                    error={!!errors.productCategory}
-                    helperText={errors.productCategory?.message}
-                  />
-                }
-              /> */}
             </div>
             <div className='flex flex-col w-[192px] justify-between rounded-lg border border-solid border-gray-900/25 bg-gray-900/25'>
               {image != null &&
@@ -272,7 +311,7 @@ const Product: FC = () => {
         </section>
         <section className='flex flex-col space-y-5 mb-10'>
           <SectionTitle title={'Ingredients'} />
-          <IngredientsTable data={product.ingredients ?? []} />
+          <IngredientsTable handleUpdateIngredients={handleUpdateIngredients} handleDeleteIngredient={handleDeleteIngredient} addIngredient={handleAddIngredient} data={productIngredients ?? []} />
           <SectionDivider />
         </section>
         <section className='flex flex-col space-y-5 mb-10'>
@@ -288,8 +327,11 @@ const Product: FC = () => {
             label='Stock'
             type='number'
           />
-          <TextField {...register('visibility')}
-            value={getValues('visibility')}
+          <TextField
+            defaultValue={defaultProduct.visibility}
+            inputProps={{
+              ...register('visibility'),
+            }}
             error={!!errors.visibility}
             helperText={
               <ErrorMessage
@@ -339,12 +381,20 @@ const Product: FC = () => {
           <SectionDivider />
         </section>
       </div>
+}
     </Dialog>
 
   )
 }
 
-const IngredientsTable: FC<{ data: GetProductIngredient[] }> = ({ data }) => {
+const IngredientsTable: FC<{ 
+  data: GetProductIngredient[], 
+  handleDeleteIngredient: (id: string) => void, 
+  handleUpdateIngredients: (ingredients: GetProductIngredient[]) => void
+  addIngredient: (newIngredient: GetProductIngredient) => void }> = ({ 
+    data, addIngredient, handleDeleteIngredient,handleUpdateIngredients }) => {
+  const items = useUnitItems()
+
   const columns = useMemo<MRT_ColumnDef<GetProductIngredient>[]>(
     () => [
       {
@@ -352,26 +402,101 @@ const IngredientsTable: FC<{ data: GetProductIngredient[] }> = ({ data }) => {
         header: 'Id',
       },
       {
+        accessorKey: 'name',
+        header: 'Name',
+      },
+      {
         accessorKey: 'hasAmount',
         header: 'Has amount',
+        maxSize: 20,
+        Cell: ({ cell }) => (
+          <Checkbox checked={cell.getValue<boolean>()} />
+        ),
+        muiTableBodyCellEditTextFieldProps: {
+          required: true,
+          type: 'checkbox',
+          variant: 'outlined',
+        },
       },
       {
         accessorKey: 'amount',
         header: 'Amount',
+        Cell: ({ cell }) => (
+          cell.getValue<number>() ? <span >{ cell.getValue<number>()}</span> : <span >&#8212;</span>
+        ),
+        enableEditing: row => row.getValue<boolean>('hasAmount') === true
       },
       {
         accessorKey: 'unit',
         header: 'Unit',
+        editVariant: 'select',
+        editSelectOptions: items.map(i => ({ value: i.key, text: i.label })),
+        Cell: ({ cell }) => (
+          cell.getValue() ? <span >{ cell.getValue<number>()}</span> : <span >&#8212;</span>
+        ),
+        enableEditing: row => row.getValue<boolean>('hasAmount') === true
       },
     ],
-    [],
+    [items],
   );
+
+  const lang = useMaterialReactTableLocalization();
+
+  type AddModalProps = {
+    isOpen: boolean,
+  }
+  const [addModalProps, setAddModalProps] = useState<AddModalProps>({ isOpen: false });
+  const handleAddDialogClose = () => {
+    setAddModalProps({ isOpen: false })
+  };
+  const handleAddDialogOpen = () => {
+    setAddModalProps({ isOpen: true });
+  };
+
+  const handleSaveRow: MaterialReactTableProps<GetProductIngredient>['onEditingRowSave'] =
+  async ({ exitEditingMode, row, values }) => {
+    data[row.index] = values;
+
+    handleUpdateIngredients([...data]);
+    exitEditingMode(); 
+  };
 
   return (
     <MaterialReactTable columns={columns} data={data}
-      initialState={{ columnVisibility: { id: false } }} //hide firstName column by default
+      initialState={{ columnVisibility: { id: false } }} 
       enableRowActions
       positionActionsColumn="last"
+      localization={lang}
+      // editingMode="table"
+      // enableEditing
+      // onEditingRowSave={handleSaveRow}
+      renderTopToolbarCustomActions={() => {
+        return <div>
+          <Tooltip arrow title="Add New Ingredient">
+            <IconButton onClick={handleAddDialogOpen}>
+              <AddBoxIcon />
+            </IconButton>
+          </Tooltip>
+          {addModalProps.isOpen === true ? <AddIngredientModal
+            addIngredient={addIngredient}
+            isOpen={true}
+            handleClose={handleAddDialogClose} /> : null}
+        </div>;
+      }}
+      renderRowActions={({ row, table }) => (
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
+          {/* <Tooltip arrow placement="left" title="Edit">
+            <IconButton onClick={() => table.setEditingRow(row)}>
+              <Edit />
+            </IconButton>
+          </Tooltip> */}
+          <Tooltip arrow placement="right" title="Delete">
+            <IconButton color="error" onClick={() => handleDeleteIngredient(row.getValue('id'))}>
+              <Delete />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )}
     />
   )
 }

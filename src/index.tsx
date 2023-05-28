@@ -23,10 +23,10 @@ import { Provider } from "react-redux"
 import { store } from "store/store"
 import Statistic from "components/pages/statistic/Statistic"
 import Orders from "components/pages/orders/Orders"
-import Products from "components/pages/prducts/Products"
+import Products from "components/pages/products/Products"
 import { RequireRoles } from "helpers/routeProtection.helper"
 import Roles from "constants/Roles"
-import Product from "components/pages/home/product/Product"
+import Product from "components/pages/product/Product"
 
 const router = createBrowserRouter([
 	{

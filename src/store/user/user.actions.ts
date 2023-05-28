@@ -10,7 +10,6 @@ export const registerCompany = createAsyncThunk<IAuthResponse, IRegisterCompany,
           const response = await AuthService.registerCompany(data)
           return response
       } catch (e) {
-        //throw e
           return thunkAPI.rejectWithValue(e as IStandardError);
       }
   }

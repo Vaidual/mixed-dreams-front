@@ -17,7 +17,7 @@ export const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
-      //removeAuthDataFromStorage()
+      removeAuthDataFromStorage()
   }
   },
   extraReducers: builder => {
@@ -37,6 +37,7 @@ export const userSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(login.fulfilled, (state, {payload}) => {
+        console.log(payload.user)
         state.isLoading = false;
         state.user = payload.user;
       })

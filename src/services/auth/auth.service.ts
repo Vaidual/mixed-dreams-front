@@ -1,7 +1,6 @@
 import { instance } from "api/api.interceptor";
-import { IAuthResponse, ILogin, IRegisterCompany, ITokens } from "interfaces/auth.interface";
-import { removeAuthDataFromStorage, saveAuthDataToStorage } from "./auth.helper";
-import { IResponseError } from "interfaces/responseError.interface";
+import { IAuthResponse, ILogin, IRegisterCompany } from "interfaces/auth.interface";
+import { saveAuthDataToStorage } from "./auth.helper";
 
 export const AuthService = {
   async registerCompany(data: IRegisterCompany) {
@@ -28,9 +27,5 @@ export const AuthService = {
     }
 
     return response.data
-  },
-
-  logout() {
-    removeAuthDataFromStorage()
   },
 }

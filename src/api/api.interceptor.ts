@@ -7,9 +7,7 @@ export const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
-
   const accessToken = getAccessToken()
-
   if (config.headers && accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
   }
@@ -20,7 +18,6 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(
   response => response,
   async (error: AxiosError) => {
-
     if (error.response?.status === 401) {
         removeTokens()
       }

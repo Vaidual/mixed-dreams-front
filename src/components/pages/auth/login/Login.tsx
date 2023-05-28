@@ -1,7 +1,7 @@
 import { Button, Checkbox, TextField } from "@mui/material"
 import { FC, useContext, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import FormControlLabel from "@mui/material/FormControlLabel"
@@ -52,7 +52,7 @@ const Login: FC = () => {
 		error: string
 	}
 
-	const [serverError, setServerError] = useState<ServerError | null>(null)
+	const [serverError, setServerError] = useState<ServerError | null>(null);
 
 	let serverErrorSubscription: Subscription
 	const unsubscribe = () => {
@@ -71,7 +71,7 @@ const Login: FC = () => {
 		try {
 			await dispatch(login(data)).unwrap()
 			redirect()
-		} catch (e) {
+		} catch (e) {	
 			const { errorCode } = e as IStandardError
 			if (errorCode === ErrorCodes.InvalidCredentials) {
 				const errorFields: Array<"email" | "password"> = ["email", "password"]
@@ -97,6 +97,8 @@ const Login: FC = () => {
 	}
 
 	const isLoading = useAppSelector(state => state.user.isLoading)
+
+	const location = useLocation();
 
 	return (
 		<>
@@ -167,6 +169,7 @@ const Login: FC = () => {
 						<Link
 							color="secondary"
 							to={"/signup"}
+							state={{from: location.state?.from}}
 							className="whitespace-nowrap font-semibold leading-6"
 						>
 							{t("login:createAccount")}

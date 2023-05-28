@@ -39,11 +39,19 @@ export const ProductService = {
   },
 
   async createProduct(product: PostProduct) {
+    const data = new FormData();
+    for (let [key, value] of Object.entries(product)) {
+      console.log(key, value)
+        data.append(key, value); 
+    }
+    console.log(data)
     const response = await instance({
       url: `/products`,
       method: 'post',
-      data: product,
-      
+      data: data,
+      headers: {
+        "Content-Type": "multipart/form-data;"
+      }
     })
 
     return response.data

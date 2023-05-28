@@ -1,5 +1,4 @@
-import { LoadingButton } from '@mui/lab'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material'
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material'
 import { FC, ReactNode } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -8,12 +7,12 @@ export type ConfirmDialogProps = {
   description: ReactNode,
   actions: ReactNode,
   isOpen: boolean,
-  isFetching: boolean,
   handleClose: () => void
   handleSubmit?: () => void
 }
 
 export const ConfirmDialog: FC<ConfirmDialogProps> = ({ title, description, isOpen, handleClose, actions }) => {
+
   return (
     <Dialog open={isOpen} onClose={handleClose} maxWidth='sm' fullWidth>
 
@@ -39,11 +38,11 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({ title, description, isOp
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText>
+
           {description}
-        </DialogContentText>
+
       </DialogContent>
-      <DialogActions>
+      <DialogActions className='px-[24px] pb-[10px]'>
         <div>
         {actions}
         </div>

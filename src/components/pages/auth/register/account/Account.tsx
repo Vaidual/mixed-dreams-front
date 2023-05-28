@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import { FormStateContext, FormStateType, useFormState } from 'hooks/useFormState';
 import { produce } from 'immer';
 import { Box, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PasswordField from 'components/ui/fields/PasswordField';
 import { useTranslation } from 'react-i18next';
 import { ErrorMessage } from 'components/ui/text/ErrorMessage';
@@ -69,6 +69,8 @@ const Contact: FC<{onNext: () => void}> = ({onNext}) => {
     );
   }
 
+  const location = useLocation();
+
   return (
     <>
       <div className='flex items-center flex-col'>
@@ -102,7 +104,7 @@ const Contact: FC<{onNext: () => void}> = ({onNext}) => {
       </form>
       <p className='text-left w-full mt-3 text-base'>
         {t('alreadyHaveAccount')}{" "}
-        <Link to={'/login'} className="font-semibold">
+        <Link to={'/login'} state={{from: location.state?.from}} className="font-semibold">
         {t('common\\form:options.signIn')}
         </Link>
       </p>

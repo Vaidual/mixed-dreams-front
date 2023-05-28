@@ -4,7 +4,9 @@ import { IAuthResponse, ITokens } from "interfaces/auth.interface"
 import Cookies from "js-cookie"
 
 export const saveTokensStorage = (data: ITokens) => {
-  Cookies.set(CookiesTypes.AccessToken, data.accessToken);
+  Cookies.set(CookiesTypes.AccessToken, data.accessToken, {
+    secure: true,
+  });
 }
 
 export const removeTokens = () => {

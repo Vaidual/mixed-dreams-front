@@ -7,6 +7,10 @@ import {
 	LinkProps as RouterLinkProps
 } from "react-router-dom"
 import { LinkProps } from "@mui/material/Link"
+import { enUS as grid_ukUA, ukUA as grid_enUS } from "@mui/x-data-grid";
+import { ukUA, enUS } from '@mui/material/locale';
+import { ukUA as pickers_ukUA, enUS as pickers_enUS } from '@mui/x-date-pickers/locales';
+import { useTranslation } from "react-i18next"
 
 const LinkBehavior = forwardRef<
 	HTMLAnchorElement,
@@ -124,11 +128,25 @@ export const useToggleMode = () => {
 				return newMode
 			})
 		})
-		, [])
+		, []);
+
+	const { i18n } = useTranslation();
+	let lang: any;
+	switch (i18n.language) {
+		case 'en':
+			lang = [enUS, grid_enUS, pickers_enUS]
+			break;
+		case 'ua':
+			lang = [ukUA, grid_ukUA, pickers_ukUA]
+			break;
+		default:
+			lang = [enUS, grid_enUS, pickers_enUS]
+			break;
+	}
 
 	const theme = useMemo(
-		() => createTheme(themeOptions(mode) as ThemeOptions),
-		[mode]
+		() => createTheme(themeOptions(mode) as ThemeOptions, ...lang),
+		[mode, lang]
 	)
 	return { mode, theme, toggleColorMode }
 }

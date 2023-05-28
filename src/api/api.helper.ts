@@ -1,6 +1,6 @@
-export const getContextType = () => ({
+export const standardHeaders = {
   'Content-Type': 'application.json'
-})
+};
 
 export const errorCatch = (error: any): string => {
   const message = error?.response?.data?.message

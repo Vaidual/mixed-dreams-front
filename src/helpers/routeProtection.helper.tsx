@@ -14,7 +14,7 @@ export const RequireRoles = ({ children, allowedRoles }: RequireRolesProps): JSX
 
   return (!!user && user.roles.some(role => allowedRoles.includes(role)))
     ? children
-    : (<Navigate to="/" state={{ from: location }} replace />)
+    : (<Navigate to="/login" state={{ from: location }} replace />)
 }
 
 export const RequireAuth: FC<{children: JSX.Element}> = ({children} ) => {
@@ -23,5 +23,5 @@ export const RequireAuth: FC<{children: JSX.Element}> = ({children} ) => {
 
   return (!!user)
     ? children
-    : (<Navigate to="/" state={{ from: location }} replace />)
+    : (<Navigate to="/login" state={{ from: location }} replace />)
 }

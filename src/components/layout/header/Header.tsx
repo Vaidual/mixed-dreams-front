@@ -37,12 +37,12 @@ const Header: FC = () => {
 	const colorMode = useContext(ColorModeContext);
 	const theme = useTheme();
 	const { t } = useTranslation('common\\header');
-	const user = useAppSelector((state) => state.user.user);
 
 	const dispatch = useDispatch<AppDispatch>();
 	const handleLogout = () => {
 		dispatch(logout())
 	}
+
 	return (
 		<header className="w-full border-b border-gray-400 fixed inset-x-0 top-0 z-50">
 			<div className="max-width-container">
@@ -94,11 +94,11 @@ const Header: FC = () => {
 							)}
 						</IconButton>
 						<LangDropDown />
-						{user !== null ? 
-						<Button onClick={handleLogout} variant="contained" className="rounded-3xl">{t('actions.logout')}</Button> :
-						<Link className="whitespace-nowrap no-underline" href="/login">
-							{t('actions.logIn')} &rarr;
-						</Link>}
+						{useAppSelector((state) => state.user.user) !== null ?
+							<Button onClick={handleLogout} variant="contained" className="rounded-3xl">{t('actions.logout')}</Button> :
+							<Link className="whitespace-nowrap no-underline" href="/login">
+								{t('actions.logIn')} &rarr;
+							</Link>}
 					</div>
 					<Button
 						onClick={handleClick}
