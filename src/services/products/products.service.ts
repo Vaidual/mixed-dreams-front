@@ -43,8 +43,7 @@ export const ProductService = {
     for (let [key, value] of Object.entries(product)) {
       console.log(key, value)
         data.append(key, value); 
-    }
-    console.log(data)
+    };
     const response = await instance({
       url: `/products`,
       method: 'post',
@@ -58,10 +57,18 @@ export const ProductService = {
   },
 
   async updateProduct(id: string, product: PutProduct) {
+    const data = new FormData();
+    for (let [key, value] of Object.entries(product)) {
+      console.log(key, value)
+        data.append(key, value); 
+    };
     const response = await instance<null>({
       url: `/products/${id}`,
       method: 'put',
-      data: product
+      data: data,
+      headers: {
+        "Content-Type": "multipart/form-data;"
+      }
     })
 
     return response.data

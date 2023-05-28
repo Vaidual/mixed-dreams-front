@@ -102,22 +102,12 @@ const Product: FC = () => {
     enabled: isEditing
   });
 
-
-
   const categories = useQuery<ReadonlyArray<ProductCategory>>(['getProductCategories'], () => {
     return ProductService.getProductCategories();
   }, {
     cacheTime: 60 * 60 * 1000,
     staleTime: 10 * 60 * 1000
   });
-  
-
-  useEffect(() => {
-    if (data) {
-      console.log(data)
-      setProduct(data)
-    }
-  }, [data]);
 
   const { setSnack } = useContext(SnackbarContext);
   useEffect(() => {
@@ -126,11 +116,21 @@ const Product: FC = () => {
     }
   }, [isEditing, isSuccess, error, setSnack, t, isLoading]);
 
-  const { register, getValues, control, formState: { errors }, handleSubmit } = useForm<SchemaType>({
+  const { reset, register, getValues, control, formState: { errors }, handleSubmit } = useForm<SchemaType>({
     resolver: yupResolver(schema),
     mode: 'onTouched',
-    defaultValues: product
+    defaultValues: useMemo(() => {
+      return product;
+    }, [product])
   });
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      setProduct(data);
+      reset(data);
+    }
+  }, [data]);
 
   const [category, setCategory] = useState<ProductCategory | null>(null);
   const [image, setImage] = useState<{ object?: File, url: string } | null>(data?.primaryImage ? { url: data?.primaryImage } : null);
@@ -155,9 +155,24 @@ const Product: FC = () => {
       setSnack({ message: t(`${ErrorCodes[(postError as IStandardError)?.errorCode]}`), color: 'error', open: true, autoHideDuration: 10_000 });
     }
   });
+  const updateProduct = useMutation(['updateProduct'], (product: PutProduct) => {
+    return ProductService.updateProduct(productId!, product);
+  }, {
+    onSuccess(newIngredient) {
+      if (image?.object) {
+        URL.revokeObjectURL(image.url);
+      }
+      queryClient.invalidateQueries({ queryKey: ['getCompanyProducts'] })
+      handleClose();
+    },
+    onError(postError) {
+      setSnack({ message: t(`${ErrorCodes[(postError as IStandardError)?.errorCode]}`), color: 'error', open: true, autoHideDuration: 10_000 });
+    }
+  });
+
   const onSubmit: SubmitHandler<SchemaType> = data => {
     if (isEditing) {
-      console.log({
+      const putProduct = {
         ...data,
         description: data.description === null ? ' ' : data.description,
         primaryImage: image?.url === product.primaryImage || image === null ? null : image.object,
@@ -171,7 +186,8 @@ const Product: FC = () => {
           }
         }),
         productCategory: category?.id ?? null
-      } as PutProduct);
+      } as PutProduct;
+      updateProduct.mutate(putProduct)
     } else {
       const postProduct = {
         ...data,

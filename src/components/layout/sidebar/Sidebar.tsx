@@ -27,10 +27,10 @@ const Sidebar: FC = () => {
 
   const menuItems: Item[] = [
     { label: "Products", to: "/products", icon: <SellIcon /> },
-    { label: "Ingredients", to: "/ingredients", icon: <EggIcon /> },
-    { label: "Orders", to: "/orders", icon: <ReceiptIcon /> },
-    { label: "Statistic", to: "/statistic", icon: <BarChartIcon /> },
-    { label: "Locations", to: "/locations", icon: <StorefrontIcon /> }
+    // { label: "Ingredients", to: "/ingredients", icon: <EggIcon /> },
+    // { label: "Orders", to: "/orders", icon: <ReceiptIcon /> },
+    // { label: "Statistic", to: "/statistic", icon: <BarChartIcon /> },
+    // { label: "Locations", to: "/locations", icon: <StorefrontIcon /> }
   ]
   return (
     <ProSidebar className='border-none mt-2' backgroundColor={theme.palette.background.default}>
