@@ -23,6 +23,10 @@ import ConfirmDialog from 'components/ui/dialogs/ConfirmDialog';
 import AddIngredientModal from 'components/ui/add-ingredient/AddIngredientModal';
 import useUnitItems from 'components/ui/add-ingredient/UnitsItems';
 import { Delete, Edit } from '@mui/icons-material';
+import { Units } from 'enums/Units';
+import { yupLocale } from 'utils/yupLocale';
+
+yup.setLocale(yupLocale);
 
 interface FormProductType extends Omit<ProductWithDetails, "id"> {
   id: string | null,
@@ -47,8 +51,8 @@ const schema = yup.object().shape({
   name: yup.string()
     .required()
     .max(50),
-  description: yup.string()
-    .max(50),
+  description: yup.string().nullable()
+    .max(2000),
   price: yup.number()
     .required()
     .min(0)
@@ -67,8 +71,8 @@ const schema = yup.object().shape({
     .required()
     .transform((value) => (isNaN(value) ? null : value))
     .nullable()
-    .min(-89.2)
-    .max(500),
+    .min(-20)
+    .max(100),
   recommendedHumidity: yup.number()
     .required()
     .transform((value) => (isNaN(value) ? null : value))
@@ -83,7 +87,7 @@ type FormData = yup.InferType<typeof schema>;
 const Product: FC = () => {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(true);
-  const { t } = useTranslation(['products', 'common\\errors']);
+  const { t } = useTranslation(['product', 'common\\errors']);
 
   const navigate = useNavigate();
   const handleClose = () => {
@@ -96,17 +100,17 @@ const Product: FC = () => {
 
   const [product, setProduct] = useState<FormProductType>(defaultProduct);
 
-  const { isLoading, error, isSuccess, data } = useQuery<ProductWithDetails>(['getProductWithDetails', productId], () => {
-    return ProductService.getProductWithDetails(productId!);
-  }, {
-    enabled: isEditing
-  });
-
   const categories = useQuery<ReadonlyArray<ProductCategory>>(['getProductCategories'], () => {
     return ProductService.getProductCategories();
   }, {
     cacheTime: 60 * 60 * 1000,
     staleTime: 10 * 60 * 1000
+  });
+
+  const { isLoading, error, isSuccess, data } = useQuery<ProductWithDetails>(['getProductWithDetails', productId], () => {
+    return ProductService.getProductWithDetails(productId!);
+  }, {
+    enabled: isEditing
   });
 
   const { setSnack } = useContext(SnackbarContext);
@@ -116,7 +120,7 @@ const Product: FC = () => {
     }
   }, [isEditing, isSuccess, error, setSnack, t, isLoading]);
 
-  const { reset, register, getValues, control, formState: { errors }, handleSubmit } = useForm<SchemaType>({
+  const { reset, register, trigger, getValues, formState: { errors, isValid }, handleSubmit } = useForm<SchemaType>({
     resolver: yupResolver(schema),
     mode: 'onTouched',
     defaultValues: useMemo(() => {
@@ -128,6 +132,10 @@ const Product: FC = () => {
     if (data) {
       console.log(data);
       setProduct(data);
+      setImage(data.primaryImage !== null ? {url: data.primaryImage} : null)
+      setProductIngredients(data.ingredients);
+      console.log(data.productCategory !== null ? categories.data?.find(c => c.id === data.productCategory)! : null)
+      setCategory(data.productCategory !== null ? categories.data?.find(c => c.id === data.productCategory)! : null);
       reset(data);
     }
   }, [data]);
@@ -171,6 +179,7 @@ const Product: FC = () => {
   });
 
   const onSubmit: SubmitHandler<SchemaType> = data => {
+    console.log(productIngredients);
     if (isEditing) {
       const putProduct = {
         ...data,
@@ -181,11 +190,11 @@ const Product: FC = () => {
           return {
             id: i.id,
             hasAmount: i.hasAmount,
-            unit: i.unit,
-            amount: i.amount
+            unit: i.unit ? i.unit : null,
+            amount: i.amount ? i.amount : null
           }
         }),
-        productCategory: category?.id ?? null
+        productCategoryId: category !== null ? category.id : null
       } as PutProduct;
       updateProduct.mutate(putProduct)
     } else {
@@ -197,11 +206,11 @@ const Product: FC = () => {
           return {
             id: i.id,
             hasAmount: i.hasAmount,
-            unit: i.unit,
-            amount: i.amount
+            unit: i.unit ? i.unit : null,
+            amount: i.amount ? i.amount : null
           }
         }),
-        productCategory: category?.id ?? null
+        productCategoryId: category !== null ? category.id : null
       } as PostProduct;
 
       createProduct.mutate(postProduct)
@@ -225,6 +234,29 @@ const Product: FC = () => {
   const SectionDivider: FC = () => <Divider className='border-b-4' variant='fullWidth' />;
   const SectionTitle: FC<{ title: string }> = ({ title }) => <span className='font-bold'>{title}</span>;
 
+  const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState<boolean>(false);
+  const handleLeaveDialogClose = () => {
+    setIsLeaveDialogOpen(false)
+  };
+  const handleLeaveDialogOpen = () => {
+    setIsLeaveDialogOpen(true)
+  };
+
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState<boolean>(false);
+  const handleSaveDialogClose = () => {
+    setIsSaveDialogOpen(false);
+  };
+  const handleSaveDialogOpen = () => {
+    if (!isValid) {
+      trigger();
+      return;
+    }
+    setIsSaveDialogOpen(true);
+  };
+  const handleSaveDialogSave = () => {
+    handleSubmit(onSubmit)();
+  };
+
   return (
     <Dialog
       fullScreen
@@ -236,284 +268,339 @@ const Product: FC = () => {
           <IconButton
             edge="start"
             color="inherit"
-            onClick={handleClose}
+            onClick={handleLeaveDialogOpen}
             aria-label="close"
           >
             <CloseIcon />
           </IconButton>
-          <div className='flex-grow text-center text-lg font-bold'>{isEditing ? 'Update item' : 'Create item'}</div>
-          <Button onClick={handleSubmit(onSubmit)} className='text-white font-bold' variant='contained'>
-            {'Save'}
+          <div className='flex-grow text-center text-lg font-bold'>{isEditing ? t('topbar.title.edit') : t('topbar.title.create')}</div>
+          <Button onClick={handleSaveDialogOpen} className='text-white font-bold' variant='contained'>
+            {t('topbar.save')}
           </Button>
         </Toolbar>
       </AppBar>
-      {isEditing && !isLoading &&
-      <div className='max-w-2xl mx-auto w-full mt-10'>
-        <section className='flex flex-col space-y-5 mb-10'>
-          <SectionTitle title={'Details'} />
-          <div className='flex flex-row  space-x-5'>
-            <div className='flex flex-col space-y-5 w-full'>
-              <TextField {...register('name')}
-                label='Name'
-                error={!!errors.name}
-                helperText={
-                  <ErrorMessage
-                    error={errors.name?.message}
-                    field={t("common\form:fields.email") as string}
-                  />
-                }
-                required />
-              <Autocomplete
-                value={category}
-                onChange={(event: any, newValue: ProductCategory | null) => {
-                  setCategory(newValue);
-                }}
-                getOptionLabel={option => option.name}
-                options={categories.data ?? []}
-                renderInput={(params) =>
-                  <TextField {...params}
-                    label="Category"
-                    error={!!errors.productCategory}
-                    helperText={errors.productCategory?.message}
-                  />
-                }
-              />
+      {((isEditing && !isLoading) || !isEditing) &&
+        <div className='max-w-2xl mx-auto w-full mt-10'>
+          <section className='flex flex-col space-y-5 mb-10 mt-10'>
+            <SectionTitle title={t('details.title')} />
+            <div className='flex flex-row  space-x-5'>
+              <div className='flex flex-col space-y-5 w-full'>
+                <TextField {...register('name')}
+                  label={t('details.fields.name.label')}
+                  error={!!errors.name}
+                  helperText={
+                    <ErrorMessage
+                      error={errors.name?.message}
+                      field={t('details.fields.name.label') as string}
+                    />
+                  }
+                  required />
+                <Autocomplete
+                  value={category}
+                  onChange={(event: any, newValue: ProductCategory | null) => {
+                    console.log(newValue)
+                    setCategory(newValue);
+                  }}
+                  getOptionLabel={option => option.name}
+                  options={categories.data ?? []}
+                  renderInput={(params) =>
+                    <TextField {...params}
+                      label={t('details.fields.category.label')}
+                      error={!!errors.productCategory}
+                      helperText={errors.productCategory?.message}
+                    />
+                  }
+                />
+              </div>
+              <div className='flex flex-col w-[192px] justify-between rounded-lg border border-solid border-gray-900/25 bg-gray-900/25'>
+                {image != null &&
+                  <>
+                    <img className='max-h-[90px] w-[192px] rounded-t-lg object-cover' src={image.url} alt='' />
+                    <Button sx={{ backgroundColor: palette.grey[800] }} className={`min-h-6 self-end h-full rounded-b-lg bg-[${palette.background.default}]`}
+                      onClick={clearImage}
+                      variant='text'
+                      fullWidth
+                    >
+                      {t('details.fields.image.remove')}
+                    </Button>
+                  </>}
+              </div>
             </div>
-            <div className='flex flex-col w-[192px] justify-between rounded-lg border border-solid border-gray-900/25 bg-gray-900/25'>
-              {image != null &&
-                <>
-                  <img className='max-h-[90px] w-[192px] rounded-t-lg' src={image.url} alt='' />
-                  <Button sx={{ backgroundColor: palette.grey[800] }} className={`min-h-6 self-end h-full rounded-b-lg bg-[${palette.background.default}]`}
-                    onClick={clearImage}
-                    variant='text'
-                    fullWidth
-                  >
-                    {'Remove'}
-                  </Button>
-                </>}
+            <TextField {...register('description')}
+              label={t('details.fields.description.label')}
+              error={!!errors.description}
+              helperText={
+                <ErrorMessage
+                  error={errors.description?.message}
+                  field={t('details.fields.description.label') as string}
+                />
+              }
+              placeholder="Add an item description. Describe details like features, options, or interesting notes"
+              multiline
+            />
+            <div>
+              <label className="block text-sm font-medium leading-6">{t('details.fields.image.label')}</label>
+              <FileUpload setImage={setImage} accept='image/*' />
             </div>
-          </div>
-          <TextField {...register('description')}
-            label="Description"
-            error={!!errors.description}
-            helperText={
-              <ErrorMessage
-                error={errors.description?.message}
-                field={t("common\form:fields.email") as string}
-              />
-            }
-            placeholder="Add an item description. Describe details like features, options, or interesting notes"
-            multiline
-          />
-          <div>
-            <label className="block text-sm font-medium leading-6">Cover photo</label>
-            <FileUpload setImage={setImage} accept='image/*' />
-          </div>
-          <TextField {...register('price')}
-            label='Price'
-            type='number'
-            error={!!errors.price}
-            helperText={
-              <ErrorMessage
-                error={errors.price?.message}
-                field={t("common\form:fields.email") as string}
-              />
-            }
-            InputProps={{
-              endAdornment: <InputAdornment position="end">$</InputAdornment>
-            }}
-          />
-          <SectionDivider />
-        </section>
-        <section className='flex flex-col space-y-5 mb-10'>
-          <SectionTitle title={'Ingredients'} />
-          <IngredientsTable handleUpdateIngredients={handleUpdateIngredients} handleDeleteIngredient={handleDeleteIngredient} addIngredient={handleAddIngredient} data={productIngredients ?? []} />
-          <SectionDivider />
-        </section>
-        <section className='flex flex-col space-y-5 mb-10'>
-          <SectionTitle title={'Settings'} />
-          <TextField {...register('amountInStock')}
-            error={!!errors.amountInStock}
-            helperText={
-              <ErrorMessage
-                error={errors.amountInStock?.message}
-                field={t("common\form:fields.email") as string}
-              />
-            }
-            label='Stock'
-            type='number'
-          />
-          <TextField
-            defaultValue={defaultProduct.visibility}
-            inputProps={{
-              ...register('visibility'),
-            }}
-            error={!!errors.visibility}
-            helperText={
-              <ErrorMessage
-                error={errors.visibility?.message}
-                field={t("common\form:fields.email") as string}
-              />
-            }
-            label='Visibility'
-            select
-          >
-            <MenuItem key={Visibility.Hidden} value={Visibility.Hidden}>
-              {'Hidden'}
-            </MenuItem>
-            <MenuItem key={Visibility.Unavaiable} value={Visibility.Unavaiable}>
-              {'Unavaiable'}
-            </MenuItem>
-            <MenuItem key={Visibility.Visible} value={Visibility.Visible}>
-              {'Visible'}
-            </MenuItem>
-          </TextField>
-          <SectionDivider />
-        </section>
-        <section className='flex flex-col space-y-5 mb-10'>
-          <SectionTitle title={'Storage Features'} />
-          <TextField {...register('recommendedTemperature')}
-            error={!!errors.recommendedTemperature}
-            helperText={
-              <ErrorMessage
-                error={errors.recommendedTemperature?.message}
-                field={t("common\form:fields.email") as string}
-              />
-            }
-            label='Recommended temperature'
-            type='number'
-          />
-          <TextField {...register('recommendedHumidity')}
-            error={!!errors.recommendedHumidity}
-            helperText={
-              <ErrorMessage
-                error={errors.recommendedHumidity?.message}
-                field={t("common\form:fields.email") as string}
-              />
-            }
-            label='Recommended humidity'
-            type='number'
-          />
-          <SectionDivider />
-        </section>
-      </div>
-}
+            <TextField {...register('price')}
+              label={t('details.fields.price.label')}
+              type='number'
+              error={!!errors.price}
+              helperText={
+                <ErrorMessage
+                  error={errors.price?.message}
+                  field={t('details.fields.price.label') as string}
+                />
+              }
+              InputProps={{
+                endAdornment: <InputAdornment position="end">$</InputAdornment>
+              }}
+            />
+            <SectionDivider />
+          </section>
+          <section className='flex flex-col space-y-5 mb-10'>
+            <SectionTitle title={t('ingredients.title')} />
+            <IngredientsTable handleUpdateIngredients={handleUpdateIngredients} handleDeleteIngredient={handleDeleteIngredient} addIngredient={handleAddIngredient} data={productIngredients ?? []} />
+            <SectionDivider />
+          </section>
+          <section className='flex flex-col space-y-5 mb-10'>
+            <SectionTitle title={t('settings.title')} />
+            <TextField {...register('amountInStock')}
+              error={!!errors.amountInStock}
+              helperText={
+                <ErrorMessage
+                  error={errors.amountInStock?.message}
+                  field={t('settings.fields.stock.label') as string}
+                />
+              }
+              label={t('settings.fields.stock.label')}
+              type='number'
+            />
+            <TextField
+              defaultValue={defaultProduct.visibility}
+              inputProps={{
+                ...register('visibility'),
+              }}
+              error={!!errors.visibility}
+              helperText={
+                <ErrorMessage
+                  error={errors.visibility?.message}
+                  field={t('settings.fields.visibility.label') as string}
+                />
+              }
+              label={t('settings.fields.visibility.label')}
+              select
+            >
+              <MenuItem key={Visibility.Hidden} value={Visibility.Hidden}>
+                {t('visibility.hidden')}
+              </MenuItem>
+              <MenuItem key={Visibility.Unavailable} value={Visibility.Unavailable}>
+                {t('visibility.unavailable')}
+              </MenuItem>
+              <MenuItem key={Visibility.Visible} value={Visibility.Visible}>
+                {t('visibility.visible')}
+              </MenuItem>
+            </TextField>
+            <SectionDivider />
+          </section>
+          <section className='flex flex-col space-y-5 mb-10'>
+            <SectionTitle title={t('storageFeatures.title')} />
+            <TextField {...register('recommendedTemperature')}
+              error={!!errors.recommendedTemperature}
+              helperText={
+                <ErrorMessage
+                  error={errors.recommendedTemperature?.message}
+                  field={t('storageFeatures.fields.temperature.label') as string}
+                />
+              }
+              label={t('storageFeatures.fields.temperature.label')}
+              type='number'
+            />
+            <TextField {...register('recommendedHumidity')}
+              //InputLabelProps={{ shrink: getValues('recommendedHumidity') !== null}}  
+              error={!!errors.recommendedHumidity}
+              helperText={
+                <ErrorMessage
+                  error={errors.recommendedHumidity?.message}
+                  field={t('storageFeatures.fields.humidity.label') as string}
+                />
+              }
+              label={t('storageFeatures.fields.humidity.label')}
+              type='number'
+            />
+            <SectionDivider />
+          </section>
+        </div>
+      }
+      <ConfirmDialog
+        title={isEditing ? t('leaveDialog.title.edit') : t('leaveDialog.title.create')}
+        description={isEditing ? t('leaveDialog.description.edit') : t('leaveDialog.description.create')}
+        isOpen={isLeaveDialogOpen}
+        handleClose={handleLeaveDialogClose}
+        actions={
+          <>
+            <Button className='mr-4 py-3 px-5 text-base'
+              onClick={handleClose}
+              color='primary'
+              variant='outlined'
+            >
+              {t('leaveDialog.actions.discard')}
+            </Button>
+            <Button className='py-3 px-5 text-base '
+              onClick={handleLeaveDialogClose}
+              color='primary'
+              variant='contained'
+            >
+              {t('leaveDialog.actions.stay')}
+            </Button>
+          </>
+        }
+      />
+      <ConfirmDialog
+        title={isEditing ? t('saveDialog.title.edit') : t('saveDialog.title.create')}
+        description={isEditing ? t('saveDialog.description.edit') : t('saveDialog.description.create')}
+        isOpen={isSaveDialogOpen}
+        handleClose={handleSaveDialogClose}
+        actions={
+          <>
+            <Button className='mr-4 py-3 px-5 text-base'
+              disabled={createProduct.isLoading || updateProduct.isLoading}
+              onClick={handleSaveDialogClose}
+              color='primary'
+              variant='outlined'
+            >
+              {t('saveDialog.actions.cancel')}
+            </Button>
+            <LoadingButton className='py-3 px-5 text-base '
+              loading={createProduct.isLoading || updateProduct.isLoading}
+              disabled={createProduct.isLoading || updateProduct.isLoading}
+              onClick={handleSaveDialogSave}
+              color='primary'
+              variant='contained'
+            >
+              {isEditing ? t('saveDialog.actions.accept.save') : t('saveDialog.actions.accept.create')}
+            </LoadingButton>
+          </>
+        }
+      />
     </Dialog>
 
   )
 }
 
-const IngredientsTable: FC<{ 
-  data: GetProductIngredient[], 
-  handleDeleteIngredient: (id: string) => void, 
+const IngredientsTable: FC<{
+  data: GetProductIngredient[],
+  handleDeleteIngredient: (id: string) => void,
   handleUpdateIngredients: (ingredients: GetProductIngredient[]) => void
-  addIngredient: (newIngredient: GetProductIngredient) => void }> = ({ 
-    data, addIngredient, handleDeleteIngredient,handleUpdateIngredients }) => {
-  const items = useUnitItems()
+  addIngredient: (newIngredient: GetProductIngredient) => void
+}> = ({
+  data, addIngredient, handleDeleteIngredient, handleUpdateIngredients }) => {
+    const items = useUnitItems()
+    const { t } = useTranslation(['product', 'ingredients']);
 
-  const columns = useMemo<MRT_ColumnDef<GetProductIngredient>[]>(
-    () => [
-      {
-        accessorKey: 'id',
-        header: 'Id',
-      },
-      {
-        accessorKey: 'name',
-        header: 'Name',
-      },
-      {
-        accessorKey: 'hasAmount',
-        header: 'Has amount',
-        maxSize: 20,
-        Cell: ({ cell }) => (
-          <Checkbox checked={cell.getValue<boolean>()} />
-        ),
-        muiTableBodyCellEditTextFieldProps: {
-          required: true,
-          type: 'checkbox',
-          variant: 'outlined',
+    const columns = useMemo<MRT_ColumnDef<GetProductIngredient>[]>(
+      () => [
+        {
+          accessorKey: 'id',
+          header: 'Id',
         },
-      },
-      {
-        accessorKey: 'amount',
-        header: 'Amount',
-        Cell: ({ cell }) => (
-          cell.getValue<number>() ? <span >{ cell.getValue<number>()}</span> : <span >&#8212;</span>
-        ),
-        enableEditing: row => row.getValue<boolean>('hasAmount') === true
-      },
-      {
-        accessorKey: 'unit',
-        header: 'Unit',
-        editVariant: 'select',
-        editSelectOptions: items.map(i => ({ value: i.key, text: i.label })),
-        Cell: ({ cell }) => (
-          cell.getValue() ? <span >{ cell.getValue<number>()}</span> : <span >&#8212;</span>
-        ),
-        enableEditing: row => row.getValue<boolean>('hasAmount') === true
-      },
-    ],
-    [items],
-  );
+        {
+          accessorKey: 'name',
+          header: t('ingredients.headers.name'),
+        },
+        {
+          accessorKey: 'hasAmount',
+          header: t('ingredients.headers.hasAmount'),
+          maxSize: 20,
+          Cell: ({ cell }) => (
+            <Checkbox checked={cell.getValue<boolean>()} />
+          ),
+          muiTableBodyCellEditTextFieldProps: {
+            required: true,
+            type: 'checkbox',
+            variant: 'outlined',
+          },
+        },
+        {
+          accessorKey: 'amount',
+          header: t('ingredients.headers.amount'),
+          Cell: ({ cell }) => (
+            cell.getValue<number>() ? <span >{cell.getValue<number>()}</span> : <span >&#8212;</span>
+          ),
+          enableEditing: row => row.getValue<boolean>('hasAmount') === true
+        },
+        {
+          accessorKey: 'unit',
+          header: t('ingredients.headers.unit'),
+          editVariant: 'select',
+          editSelectOptions: items.map(i => ({ value: i.key, text: i.label })),
+          Cell: ({ cell }) => (
+            cell.getValue<number>() ? <span >{t(`ingredients:units.${Units[cell.getValue<number>()]}`)}</span> : <span >&#8212;</span>
+          ),
+          enableEditing: row => row.getValue<boolean>('hasAmount') === true
+        },
+      ],
+      [items],
+    );
 
-  const lang = useMaterialReactTableLocalization();
+    const lang = useMaterialReactTableLocalization();
 
-  type AddModalProps = {
-    isOpen: boolean,
-  }
-  const [addModalProps, setAddModalProps] = useState<AddModalProps>({ isOpen: false });
-  const handleAddDialogClose = () => {
-    setAddModalProps({ isOpen: false })
-  };
-  const handleAddDialogOpen = () => {
-    setAddModalProps({ isOpen: true });
-  };
+    type AddModalProps = {
+      isOpen: boolean,
+    }
+    const [addModalProps, setAddModalProps] = useState<AddModalProps>({ isOpen: false });
+    const handleAddDialogClose = () => {
+      setAddModalProps({ isOpen: false })
+    };
+    const handleAddDialogOpen = () => {
+      setAddModalProps({ isOpen: true });
+    };
 
-  const handleSaveRow: MaterialReactTableProps<GetProductIngredient>['onEditingRowSave'] =
-  async ({ exitEditingMode, row, values }) => {
-    data[row.index] = values;
+    const handleSaveRow: MaterialReactTableProps<GetProductIngredient>['onEditingRowSave'] =
+      async ({ exitEditingMode, row, values }) => {
+        data[row.index] = values;
 
-    handleUpdateIngredients([...data]);
-    exitEditingMode(); 
-  };
+        handleUpdateIngredients([...data]);
+        exitEditingMode();
+      };
 
-  return (
-    <MaterialReactTable columns={columns} data={data}
-      initialState={{ columnVisibility: { id: false } }} 
-      enableRowActions
-      positionActionsColumn="last"
-      localization={lang}
-      // editingMode="table"
-      // enableEditing
-      // onEditingRowSave={handleSaveRow}
-      renderTopToolbarCustomActions={() => {
-        return <div>
-          <Tooltip arrow title="Add New Ingredient">
-            <IconButton onClick={handleAddDialogOpen}>
-              <AddBoxIcon />
-            </IconButton>
-          </Tooltip>
-          {addModalProps.isOpen === true ? <AddIngredientModal
-            addIngredient={addIngredient}
-            isOpen={true}
-            handleClose={handleAddDialogClose} /> : null}
-        </div>;
-      }}
-      renderRowActions={({ row, table }) => (
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
-          {/* <Tooltip arrow placement="left" title="Edit">
+    return (
+      <MaterialReactTable columns={columns} data={data}
+        initialState={{ columnVisibility: { id: false } }}
+        enableRowActions
+        positionActionsColumn="last"
+        localization={lang}
+        // editingMode="table"
+        // enableEditing
+        // onEditingRowSave={handleSaveRow}
+        renderTopToolbarCustomActions={() => {
+          return <div>
+            <Tooltip arrow title="Add New Ingredient">
+              <IconButton onClick={handleAddDialogOpen}>
+                <AddBoxIcon />
+              </IconButton>
+            </Tooltip>
+            {addModalProps.isOpen === true ? <AddIngredientModal
+              addIngredient={addIngredient}
+              isOpen={true}
+              handleClose={handleAddDialogClose} /> : null}
+          </div>;
+        }}
+        renderRowActions={({ row, table }) => (
+          <Box sx={{ display: 'flex', gap: '1rem' }}>
+            {/* <Tooltip arrow placement="left" title="Edit">
             <IconButton onClick={() => table.setEditingRow(row)}>
               <Edit />
             </IconButton>
           </Tooltip> */}
-          <Tooltip arrow placement="right" title="Delete">
-            <IconButton color="error" onClick={() => handleDeleteIngredient(row.getValue('id'))}>
-              <Delete />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      )}
-    />
-  )
-}
+            <Tooltip arrow placement="right" title="Delete">
+              <IconButton color="error" onClick={() => handleDeleteIngredient(row.getValue('id'))}>
+                <Delete />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
+      />
+    )
+  }
 export default Product

@@ -1,0 +1,23 @@
+{
+	"table": {
+		"headers": {
+			"product": "Product",
+			"price": "Price",
+			"stock": "Stock"
+		},
+    "actions": {
+      "edit": "Edit",
+      "delete":"Delete"
+    }
+	},
+  "actions": {
+    "createProduct":"Create a Product"
+  },
+	"deleteDialog": {
+    "title":"Delete product",
+    "description":"Are you sure you want to delete the <1>productName</1> product? This action cannot be undone.",
+    "actions": {
+      "delete":"Delete"
+    }
+  }
+}

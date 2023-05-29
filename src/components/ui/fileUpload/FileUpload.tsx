@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, SvgIcon, Typography, useTheme } from '@mui/material'
 import { ReactComponent as LanscapeIcon } from './assets/images/landscape.svg';
+import { useTranslation } from 'react-i18next';
 
 export type FileUploadProps = {
   imageButton?: boolean
@@ -33,6 +34,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     console.log(`Drop ${event.dataTransfer.files[0].name}`)
   },
 }) => {
+  const { t } = useTranslation(['product']);
   const [isDragOver, setIsDragOver] = React.useState<boolean>(false)
   const [isMouseOver, setIsMouseOver] = React.useState<boolean>(false)
   const { palette } = useTheme();
@@ -81,9 +83,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           <path d="M4 17L7.58959 13.7694C8.38025 13.0578 9.58958 13.0896 10.3417 13.8417L11.5 15L15.0858 11.4142C15.8668 10.6332 17.1332 10.6332 17.9142 11.4142L20 13.5M11 9C11 9.55228 10.5523 10 10 10C9.44772 10 9 9.55228 9 9C9 8.44772 9.44772 8 10 8C10.5523 8 11 8.44772 11 9ZM6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20Z"
             stroke={palette.text.primary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
-        <p>&nbsp;{'Drag image here or'}&nbsp;</p>
+        <p>&nbsp;{t('details.fields.image.drag')}&nbsp;</p>
         <label className="cursor-pointer rounded-md font-semibold focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2">
-          <Typography color='secondary'>upload.</Typography>
+          <Typography color='secondary'>{t('details.fields.image.upload')}</Typography>
           <input onChange={handleChange}
             accept={accept}
             name="file-upload"

@@ -8,7 +8,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { ErrorCodes } from 'enums/ErrorCodes'
 import { IStandardError } from 'interfaces/responseError.interface'
 import { SnackbarContext } from 'providers/Snackbar.provider'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import ConfirmDialog from 'components/ui/dialogs/ConfirmDialog'
 import { LoadingButton } from '@mui/lab'
 import { useMaterialReactTableLocalization } from 'hooks/useMaterialReactTableLocalization'
@@ -37,11 +37,11 @@ const Products: FC = () => {
       },
       {
         accessorKey: 'name',
-        header: 'Product',
+        header: t('table.headers.product'),
       },
       {
         accessorKey: 'price',
-        header: 'Price',
+        header: t('table.headers.price'),
         Cell: ({ cell }) => (
 
           cell.getValue<number>()?.toLocaleString?.('en-US', {
@@ -52,7 +52,7 @@ const Products: FC = () => {
       },
       {
         accessorKey: 'amountInStock',
-        header: 'Stock',
+        header: t('table.headers.stock'),
         Cell: ({ cell }) => (
           <Box
             component="div"
@@ -124,15 +124,12 @@ const Products: FC = () => {
 
   return (
     <div className='w-full'>
-      <div className='flex flex-row justify-between mt-4'>
-        <div>
-          wd
-        </div>
+      <div className='flex flex-row justify-end mt-4'>
         <div>
           <Button className='text-white font-bold rounded-md'
             variant='contained'
             onClick={handleProductCreate}
-          >Create a Product</Button>
+          >{t('actions.createProduct')}</Button>
         </div>
       </div>
       <div className='mt-4'>
@@ -144,30 +141,32 @@ const Products: FC = () => {
           localization={lang}
           renderRowActionMenuItems={({ row }) => [
             <MenuItem key="edit" onClick={() => handleProductEdit(row.getValue('id'))}>
-              Edit
+              {t('table.actions.edit')}
             </MenuItem>,
             <MenuItem key="delete" onClick={() => openDeleteModal(row.getValue('id'), row.getValue('name'))}>
-              <Typography color='red'>Delete</Typography>
+              <Typography color='red'>
+                {t('table.actions.delete')}
+              </Typography>
             </MenuItem>,
           ]}
         />
       </div>
       <Outlet />
       <ConfirmDialog
-        title='Delete product'
-        description={'Are you sure you want to delete the ' + <strong>{deleteModelProps.product?.name}</strong> + ' product? This action cannot be undone.'}
+        title={t('deleteDialog.title')}
+        description={<Trans t={t} i18nKey="deleteDialog.description">Are you sure you want to delete the <strong>{deleteModelProps.product?.name}</strong> product? This action cannot be undone.</Trans>}
         isOpen={deleteModelProps.isOpen}
         handleClose={handleDeleteDialogClose}
         actions={
-          <LoadingButton
-            loading={deleteProduct.isLoading}
+          <Button
+            // loading={deleteProduct.isLoading}
             disabled={deleteProduct.isLoading}
             onClick={handleProductDelete}
             color='error'
             variant='contained'
           >
-            'Delete'
-          </LoadingButton>
+            {t('deleteDialog.actions.delete')}
+          </Button>
         }
       />
     </div>

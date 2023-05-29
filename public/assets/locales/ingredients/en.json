@@ -1,0 +1,27 @@
+{
+  "fields": {
+    "ingredient": "Ingredient",
+    "hasAmount": "Has amount",
+    "amount": "Amount",
+    "unit": "Unit"
+  },
+  "addToProductDialog": {
+    "title": "Add an ingredient",
+    "content": {
+      "pickIngredient": "Pick ingredient"
+    },
+    "actions": {
+      "add": "Add"
+    }
+  },
+  "units": {
+    "item": "Pieces",
+    "Cup": "Cups",
+    "Gram": "Grams",
+    "Kilogram": "Kilograms",
+    "Liter": "Liters",
+    "Milliliter": "Milliliter",
+    "Ounce": "Ounces",
+    "Pint": "Pints"
+  }
+}

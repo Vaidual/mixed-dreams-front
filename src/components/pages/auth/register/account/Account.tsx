@@ -10,6 +10,9 @@ import { Link, useLocation } from 'react-router-dom';
 import PasswordField from 'components/ui/fields/PasswordField';
 import { useTranslation } from 'react-i18next';
 import { ErrorMessage } from 'components/ui/text/ErrorMessage';
+import { yupLocale } from 'utils/yupLocale';
+
+yup.setLocale(yupLocale);
 
 const schema = yup.object({
   email: yup.string()

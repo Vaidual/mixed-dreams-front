@@ -1,0 +1,23 @@
+{
+	"table": {
+		"headers": {
+			"product": "Продукт",
+			"price": "Ціна",
+			"stock": "Запас"
+		},
+    "actions": {
+      "edit": "Редагувати",
+      "delete":"Видалити"
+    }
+	},
+	"actions": {
+		"createProduct": "Створити продукт"
+	},
+	"deleteDialog": {
+    "title":"Видалити товар",
+    "description":"Ви впевнені, що хочете видалити товар <1>productName</1>? Цю дію не можна скасувати.",
+    "actions": {
+      "delete":"Видалити"
+    }
+  }
+}

@@ -17,7 +17,7 @@ export interface PostProduct {
   recommendedTemperature: number,
   recommendedHumidity: number,
   ingredients?: PostProductIngredient[]
-  productCategory: string
+  productCategoryId: string
 }
 
 export interface PutProduct {
@@ -31,7 +31,7 @@ export interface PutProduct {
   recommendedTemperature: number,
   recommendedHumidity: number,
   ingredients?: PostProductIngredient[]
-  productCategory: string
+  productCategoryId: string
 }
 
 export interface GetProductIngredient {

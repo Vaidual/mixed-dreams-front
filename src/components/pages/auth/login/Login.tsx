@@ -17,6 +17,9 @@ import { ErrorCodes } from "enums/ErrorCodes"
 import { useAppSelector } from "hooks/userAppSelector"
 import { IStandardError } from "interfaces/responseError.interface"
 import { Subscription } from "react-hook-form/dist/utils/createSubject"
+import { yupLocale } from "utils/yupLocale"
+
+yup.setLocale(yupLocale);
 
 type FormDataType = {
 	email: string

@@ -28,6 +28,8 @@ import { RequireRoles } from "helpers/routeProtection.helper"
 import Roles from "constants/Roles"
 import Product from "components/pages/product/Product"
 
+yup.setLocale(yupLocale);
+
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -77,7 +79,6 @@ const router = createBrowserRouter([
 	}
 ])
 
-yup.setLocale(yupLocale);
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {

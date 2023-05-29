@@ -23,8 +23,10 @@
     "emailFormat":"Incorrect email format",
     "minString":"{{field}} must be at least {{min}} characters",
     "maxString":"{{field}} must be maximum {{max}} characters",
-    "minDate":"{{field}} must be at least {{min, dateFormat}}",
-    "maxDate":"{{field}} must be no more than {{max, dateFormat}}",
+    "minDate":"{{field}} must be at least {{min, dd/MM/yyyy}}",
+    "maxDate":"{{field}} must be no more than {{max, dd/MM/yyyy}}",
+    "minNumber":"{{field}} must be at least {{min}}",
+    "maxNumber":"{{field}} must be no more than {{max}}",
     "passwordCharacters": "Password must contain al least one upper, lower and special character",
     "passwordsNotMatching": "Passwords don't match"
   },

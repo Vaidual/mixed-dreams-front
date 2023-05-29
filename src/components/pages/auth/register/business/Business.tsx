@@ -9,7 +9,9 @@ import { Box, Button, CircularProgress } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useTranslation } from 'react-i18next';
 import { ErrorMessage } from 'components/ui/text/ErrorMessage';
+import { yupLocale } from 'utils/yupLocale';
 
+yup.setLocale(yupLocale);
 
 // interface IBusinessSchema {  
 //   country: string;
@@ -32,8 +34,7 @@ const schema = yup.object().shape({
     .typeError('validations.dateType')
     .required()
     .min(MinDate)
-    .max(new Date())
-  ,
+    .max(new Date()),
   firstName: yup.string()
     .required()
     .trim()
@@ -157,6 +158,10 @@ const Business: FC<{ onComplete: () => void; onPrev: () => void; isLoading: bool
             }) => (
               <DatePicker
                 {...field}
+                // onChange={(val) => {
+                //   console.log(typeof val, val);
+                //   return val;
+                // }}
                 className="w-full"
                 label="Birthday"
                 value={value ?? null}

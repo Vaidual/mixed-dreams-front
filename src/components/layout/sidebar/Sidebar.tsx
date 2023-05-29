@@ -9,6 +9,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import { useAppSelector } from 'hooks/userAppSelector';
 import Roles from 'constants/Roles';
 import EggIcon from '@mui/icons-material/Egg';
+import { useTranslation } from 'react-i18next';
 
 type Item = {
   label: string,
@@ -17,6 +18,7 @@ type Item = {
 }
 
 const Sidebar: FC = () => {
+  const {t} = useTranslation("common\\sidebar");
   const roles = useAppSelector((state) => state.user.user?.roles);
   const theme = useTheme();
   const location = useLocation();
@@ -26,7 +28,7 @@ const Sidebar: FC = () => {
   }
 
   const menuItems: Item[] = [
-    { label: "Products", to: "/products", icon: <SellIcon /> },
+    { label: t("products"), to: "/products", icon: <SellIcon /> },
     // { label: "Ingredients", to: "/ingredients", icon: <EggIcon /> },
     // { label: "Orders", to: "/orders", icon: <ReceiptIcon /> },
     // { label: "Statistic", to: "/statistic", icon: <BarChartIcon /> },

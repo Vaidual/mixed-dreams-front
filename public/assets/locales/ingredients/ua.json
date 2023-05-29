@@ -1,0 +1,27 @@
+{
+  "fields": {
+    "ingredient": "Інгредієнт",
+    "hasAmount": "Має кількість",
+    "amount": "Кількість",
+    "unit": "Одиниця виміру"
+  },
+  "addToProductDialog": {
+    "title": "Додати інгредієнт",
+    "content": {
+      "pickIngredient": "Виберіть інгредієнт"
+    },
+    "actions": {
+      "add": "Додати"
+    }
+  },
+  "units": {
+    "Item": "Штуки",
+    "Cup": "Стакани",
+    "Gram": "Грами",
+    "Kilogram": "Кілограми",
+    "Liter": "Літри",
+    "Milliliter": "Мілілітри",
+    "Ounce": "Унції",
+    "Pint": "Пінти"
+  }
+}

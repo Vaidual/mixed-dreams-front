@@ -15,6 +15,9 @@ import { ErrorMessage } from '../text/ErrorMessage';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { GetProductIngredient } from 'interfaces/product.interface';
+import { yupLocale } from 'utils/yupLocale';
+
+yup.setLocale(yupLocale);
 
 type FormValues = {
   ingredient: IngredientOption | null;
@@ -37,7 +40,7 @@ const schema = yup.object().shape({
     .nullable()
     .when('hasAmount', {
       is: (value: boolean) => value,
-      then: (rule) => rule.required('111').min(0, '222'),
+      then: (rule) => rule.required().min(0),
     }),
   unit: yup.number()
     .when('hasAmount', {
@@ -49,7 +52,7 @@ const schema = yup.object().shape({
 type FormData = yup.InferType<typeof schema>;
 
 const AddIngredientModal: FC<{ isOpen: boolean, handleClose: () => void, addIngredient: (newIngredient: GetProductIngredient) => void }> = ({ isOpen, handleClose, addIngredient }) => {
-  const { t } = useTranslation(['common\\errors']);
+  const { t } = useTranslation(['ingredients', 'common\\errors']);
   const { setSnack } = useContext(SnackbarContext);
   const queryClient = useQueryClient()
 
@@ -105,12 +108,12 @@ const AddIngredientModal: FC<{ isOpen: boolean, handleClose: () => void, addIngr
     </MenuItem>);
   return (
     <ConfirmDialog
-      title='Add an ingredient'
+      title={t('addToProductDialog.title')}
       description={ingredients.isLoading ?
         <Skeleton className='h-56' variant="rectangular" />
         : (
           <form className='mt-4 space-y-3' id="add-ingredient-form" onSubmit={handleSubmit(onSubmit)}>
-            <h3 className='text-lg'>{'Pick ingredient'}</h3>
+            <h3 className='text-lg'>{t('addToProductDialog.content.pickIngredient')}</h3>
             <Autocomplete
               value={ingredient}
               onChange={async (event, newValue) => {
@@ -154,12 +157,12 @@ const AddIngredientModal: FC<{ isOpen: boolean, handleClose: () => void, addIngr
               freeSolo
               renderInput={(params) => (
                 <TextField {...params}
-                  label="Ingredient" />
+                  label={t('fields.ingredient')} />
               )}
             />
             <div>
               <div className='mt-8'>
-                <FormControlLabel label="Has amount"
+                <FormControlLabel label={t('fields.hasAmount')}
                   control={
                     <Checkbox {...register('hasAmount')}
                       onChange={(value) => {
@@ -181,10 +184,10 @@ const AddIngredientModal: FC<{ isOpen: boolean, handleClose: () => void, addIngr
                   helperText={
                     <ErrorMessage
                       error={errors.amount?.message}
-                      field={t("common\form:fields.email") as string}
+                      field={t('fields.amount') as string}
                     />
                   }
-                  label='Amount'
+                  label={t('fields.amount')}
                   type='number'
                 />
               </div>
@@ -196,7 +199,7 @@ const AddIngredientModal: FC<{ isOpen: boolean, handleClose: () => void, addIngr
                   }}
                   disabled={measureInputsDisabled}
                   fullWidth
-                  label='Unit'
+                  label={t('fields.unit')}
                   select
                 >
                   {items}
@@ -218,7 +221,7 @@ const AddIngredientModal: FC<{ isOpen: boolean, handleClose: () => void, addIngr
             color='primary'
             variant='contained'
           >
-            'Add'
+            {t('addToProductDialog.actions.add')}
           </Button>
       }
     />

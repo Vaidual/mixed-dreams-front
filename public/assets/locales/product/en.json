@@ -1,0 +1,99 @@
+{
+	"topbar": {
+		"title": {
+			"create": "Create product",
+			"edit": "Edit product"
+		},
+		"save": "Save"
+	},
+	"details": {
+    "title": "Details",
+    "fields": {
+      "name": {
+        "label": "Name"
+      },
+      "category": {
+        "label": "Category"
+      },
+      "description": {
+        "label": "Description"
+      },
+      "image": {
+        "label": "Cover photo",
+        "drag": "Drag image here or",
+        "upload": "upload",
+        "remove":"Remove"
+      },
+      "price": {
+        "label": "Price"
+      }
+    }
+  },
+	"settings": {
+    "title": "Settings",
+    "fields": {
+      "stock": {
+        "label": "Stock"
+      },
+      "visibility": {
+        "label": "Visibility"
+      }
+    }
+  },
+  "storageFeatures": {
+    "title": "Storage Features",
+    "fields": {
+      "temperature": {
+        "label": "Recommended temperature"
+      },
+      "humidity": {
+        "label": "Recommended humidity"
+      }
+    }
+  },
+  "ingredients": {
+    "title": "Ingredients",
+    "headers": {
+      "name": "Name",
+      "hasAmount": "Has amount",
+      "amount": "Amount",
+      "unit": "Unit"
+    }
+  },
+  "visibility": {
+    "hidden": "Hidden",
+    "visible": "Visible",
+    "unavailable": "Unavailable"
+  },
+	"leaveDialog": {
+    "title": {
+      "edit": "Stop editing and discard changes?",
+      "create": "Stop creating and discard product?"
+    },
+    "description":{
+      "edit": "Are you sure you want to stop editing product? All changes will be discarded.",
+      "create": "Are you sure you want to stop product creating? It will not be saved."
+    },
+    "actions": {
+      "discard": "Discard changes",
+      "stay": "Stay"
+    }
+  },
+	"saveDialog": {
+    "title": {
+      "edit": "Save changes?",
+      "create": "Create new product?"
+    },
+    "description":{
+      "edit": "All changes of the current product will be saved.",
+      "create": "New product will be created."
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "accept": {
+        "save": "Save",
+        "create": "Create"
+      }
+    }
+  }
+}
