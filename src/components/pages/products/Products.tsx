@@ -12,6 +12,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import ConfirmDialog from 'components/ui/dialogs/ConfirmDialog'
 import { LoadingButton } from '@mui/lab'
 import { useMaterialReactTableLocalization } from 'hooks/useMaterialReactTableLocalization'
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { ExportToCsv } from 'export-to-csv';
 
 const Products: FC = () => {
   const { t } = useTranslation(['products', 'common\\errors']);
@@ -80,6 +82,17 @@ const Products: FC = () => {
     ],
     [],
   );
+  const csvOptions = {
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalSeparator: '.',
+    showLabels: true,
+    useBom: true,
+    useKeysAsHeaders: false,
+    headers: columns.map((c) => c.header),
+  };
+  
+  const csvExporter = new ExportToCsv(csvOptions);
 
   const navigate = useNavigate();
   const handleProductCreate = () => {
@@ -121,6 +134,9 @@ const Products: FC = () => {
   })
 
   const lang = useMaterialReactTableLocalization();
+  const handleExportData = () => {
+    csvExporter.generateCsv(data);
+  };
 
   return (
     <div className='w-full'>
@@ -149,6 +165,22 @@ const Products: FC = () => {
               </Typography>
             </MenuItem>,
           ]}
+          renderTopToolbarCustomActions={({ table }) => (
+            <Box
+              sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}
+            >
+              <Button
+                color="primary"
+                //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
+                onClick={handleExportData}
+                startIcon={<FileDownloadIcon />}
+                variant="contained"
+              >
+                Export All Data
+              </Button>
+
+            </Box>
+          )}
         />
       </div>
       <Outlet />
