@@ -1,5 +1,6 @@
 # MixedDreams
-
+ ![GitHub last commit](https://img.shields.io/github/last-commit/Vaidual/mixed-dreams)
+ 
 Front-End part of POS like system with some storage additions.
 
 ## Features:
