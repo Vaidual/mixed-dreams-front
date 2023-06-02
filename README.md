@@ -1,12 +1,15 @@
 # MixedDreams
 
-Front-End part of POS like system with some storage additions. React client for animal collar managment/promotion system.
+Front-End part of POS like system with some storage additions.
 
 ## Features:
-- Widgets from Material UI.
+- Responsive UI made with Material UI widgets and Tailwingcss inline-styles.
 - Black/white theme.
-- Ukrainian/English languages.
-- Some simplifications for woking with api with Redux
+- Ukrainian/English localization including server errors.
+- Client state management with Redux.
+- Server state management with React Query.
+- Typizatiion with us of Typescript.
+- Routes protection and much more.
 
 ## Installation
 
@@ -18,4 +21,4 @@ Front-End part of POS like system with some storage additions. React client for 
 
 ## Demo
 
-![App Screenshot]([https://i.imgur.com/eVeXFtb.png](https://imgur.com/qATHTn6))
+![](https://i.imgur.com/qATHTn6.gif)
