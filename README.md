@@ -21,4 +21,4 @@ Front-End part of POS like system with some storage additions.
 
 ## Demo
 
-![](https://i.imgur.com/qATHTn6.gif)
+![demo (1)](https://github.com/Vaidual/mixed-dreams-front/assets/99952064/4c15bc07-4d9f-4c70-90ec-13952a36870c)
