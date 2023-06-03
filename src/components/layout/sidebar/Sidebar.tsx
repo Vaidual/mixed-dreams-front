@@ -15,6 +15,7 @@ import { getAccessToken } from 'services/auth/auth.helper';
 import jwt_decode from "jwt-decode";
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import Topics from 'constants/Topics';
+import { ICompanyClaims } from 'interfaces/claims.interface';
 
 type Item = {
   label: string,
@@ -33,12 +34,16 @@ const Sidebar: FC = () => {
   const [notificationsCount, setNotificationsCount] = useState(0);
   useEffect(() => {
     if (roles?.some(role => [Roles.Company].includes(role))) {
-      const newConnection = new HubConnectionBuilder()
-        .withUrl(process.env.REACT_APP_API_NOTIFICATION_HUB as string)
-        .withAutomaticReconnect()
-        .build();
+      try {
+        const newConnection = new HubConnectionBuilder()
+          .withUrl(process.env.REACT_APP_API_NOTIFICATION_HUB as string)
+          .withAutomaticReconnect()
+          .build();
 
-      setConnection(newConnection);
+        setConnection(newConnection);
+      } catch (error) {
+        console.log('Connection failed: ', error)
+      }
     }
   }, [roles]);
 
@@ -50,7 +55,6 @@ const Sidebar: FC = () => {
 
           const token = getAccessToken() as string;
           var decodedHeader: ICompanyClaims = jwt_decode(token);
-          console.log(decodedHeader)
           connection.invoke(Topics.JoinGroup, decodedHeader.TenantId);
 
           connection.on(Topics.LowWaterNotification, message => {
@@ -68,16 +72,14 @@ const Sidebar: FC = () => {
 
   const menuItems: Item[] = [
     { label: t("products"), to: "/products", icon: <SellIcon /> },
-    {
-      label: "Devices", to: "/devices", icon: <DeviceHubIcon />, suffix: notificationsCount > 0 ? <Badge badgeContent={notificationsCount} color='warning' /> : null
-    },
+    // {
+    //   label: "Devices", to: "/devices", icon: <DeviceHubIcon />, suffix: notificationsCount > 0 ? <Badge badgeContent={notificationsCount} color='warning' /> : null
+    // },
     // { label: "Ingredients", to: "/ingredients", icon: <EggIcon /> },
     // { label: "Orders", to: "/orders", icon: <ReceiptIcon /> },
     // { label: "Statistic", to: "/statistic", icon: <BarChartIcon /> },
     // { label: "Locations", to: "/locations", icon: <StorefrontIcon /> }
   ]
-
-  console.log(22222121)
 
   return (
     <ProSidebar className='border-none mt-2' backgroundColor={theme.palette.background.default}>

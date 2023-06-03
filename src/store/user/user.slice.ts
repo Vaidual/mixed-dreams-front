@@ -22,28 +22,27 @@ export const userSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(registerCompany.pending, state => {
-        state.isLoading = true;
-      })
-      .addCase(registerCompany.fulfilled, (state, {payload}) => {
-        state.isLoading = false;
-        state.user = payload.user;
-      })
-      .addCase(registerCompany.rejected, (state) => {
-        state.isLoading = false;
-      })
+			.addCase(registerCompany.pending, state => {
+				state.isLoading = true
+			})
+			.addCase(registerCompany.fulfilled, (state, { payload }) => {
+				state.isLoading = false
+				state.user = payload.user
+			})
+			.addCase(registerCompany.rejected, state => {
+				state.isLoading = false
+			})
 
-      .addCase(login.pending, state => {
-        state.isLoading = true;
-      })
-      .addCase(login.fulfilled, (state, {payload}) => {
-        console.log(payload.user)
-        state.isLoading = false;
-        state.user = payload.user;
-      })
-      .addCase(login.rejected, (state) => {
-        state.isLoading = false;
-      })
+			.addCase(login.pending, state => {
+				state.isLoading = true
+			})
+			.addCase(login.fulfilled, (state, { payload }) => {
+				state.isLoading = false
+				state.user = payload.user
+			})
+			.addCase(login.rejected, state => {
+				state.isLoading = false
+			})
   }
 })
 

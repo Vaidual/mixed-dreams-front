@@ -67,6 +67,7 @@ const RegisterWrapper: FC = () => {
 
   const onComplete = useCallback(async () => {
     const { birthday, firstName, lastName, companyName, ...address } = formState.steps.business.value;
+    console.log(birthday)
     const data: IRegisterCompany =
     {
       ...formState.steps.account.value,

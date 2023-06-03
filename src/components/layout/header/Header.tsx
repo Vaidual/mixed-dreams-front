@@ -28,6 +28,8 @@ const Languages: { id: Language; name: string }[] = [
 const Header: FC = () => {
 	const menuRef = useRef<HTMLDivElement>(null);
 	const [isOpened, setIsOpened] = useState(false);
+	const user = useAppSelector((state) => state.user.user);
+
 	useEffect(() => {
 		if (isOpened) menuRef.current?.classList.remove("hidden");
 		else menuRef.current?.classList.add("hidden");
@@ -42,6 +44,12 @@ const Header: FC = () => {
 	const handleLogout = () => {
 		dispatch(logout())
 	}
+
+	const authButton: JSX.Element = !!user ?
+		<Button onClick={handleLogout} variant="contained" className="rounded-3xl">{t('actions.logout')}</Button> :
+		<Link className="whitespace-nowrap no-underline" href="/login">
+			{t('actions.logIn')} &rarr;
+		</Link>
 
 	return (
 		<header className="w-full border-b border-gray-400 fixed inset-x-0 top-0 z-50">
@@ -94,11 +102,7 @@ const Header: FC = () => {
 							)}
 						</IconButton>
 						<LangDropDown />
-						{useAppSelector((state) => state.user.user) !== null ?
-							<Button onClick={handleLogout} variant="contained" className="rounded-3xl">{t('actions.logout')}</Button> :
-							<Link className="whitespace-nowrap no-underline" href="/login">
-								{t('actions.logIn')} &rarr;
-							</Link>}
+						{authButton}
 					</div>
 					<Button
 						onClick={handleClick}
