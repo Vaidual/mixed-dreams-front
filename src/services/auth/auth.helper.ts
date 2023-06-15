@@ -1,12 +1,16 @@
 import CookiesTypes from "constants/CookiesTypes"
 import StorageTypes from "constants/StorageTypes"
 import { IAuthResponse, ITokens } from "interfaces/auth.interface"
+import { ICompanyClaims } from "interfaces/claims.interface"
 import Cookies from "js-cookie"
+import jwt_decode from "jwt-decode"
 
 export const saveTokensStorage = (data: ITokens) => {
-  Cookies.set(CookiesTypes.AccessToken, data.accessToken, {
-    secure: true,
-  });
+	var decodedHeader: ICompanyClaims = jwt_decode(data.accessToken)
+	Cookies.set(CookiesTypes.AccessToken, data.accessToken, {
+		secure: true,
+		expires: decodedHeader.exp
+	})
 }
 
 export const removeTokens = () => {

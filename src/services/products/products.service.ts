@@ -27,6 +27,15 @@ export const ProductService = {
 		return response.data
 	},
 
+	async duplicateProduct(id: string) {
+		const response = await instance<ProductWithDetails>({
+			url: `/products/${id}/duplicate`,
+			method: "POST"
+		})
+
+		return response.data
+	},
+
 	async getProductWithDetails(id: string) {
 		const response = await instance<ProductWithDetails>({
 			url: `/products/${id}/details`,
@@ -49,16 +58,15 @@ export const ProductService = {
 		const data = new FormData()
 		for (let [key, value] of Object.entries(product)) {
 			if (key === "ingredients") {
-        (value as Array<PostProductIngredient>).forEach((v, i) => {
-          for (let [ingredientKey, ingredientValue] of Object.entries(v)) {
-            data.append(`ingredients[${i}].${ingredientKey}`, ingredientValue);
-            console.log(`ingredients[${i}].${ingredientKey}`, ingredientValue);
-          };
-        })
+				;(value as Array<PostProductIngredient>).forEach((v, i) => {
+					for (let [ingredientKey, ingredientValue] of Object.entries(v)) {
+						data.append(`ingredients[${i}].${ingredientKey}`, ingredientValue)
+						console.log(`ingredients[${i}].${ingredientKey}`, ingredientValue)
+					}
+				})
 			} else {
-        data.append(key, value)
-      }
-			
+				data.append(key, value)
+			}
 		}
 		const response = await instance({
 			url: `/products`,
@@ -76,15 +84,15 @@ export const ProductService = {
 		const data = new FormData()
 		for (let [key, value] of Object.entries(product)) {
 			if (key === "ingredients") {
-        (value as Array<PostProductIngredient>).forEach((v, i) => {
-          for (let [ingredientKey, ingredientValue] of Object.entries(v)) {
-            data.append(`ingredients[${i}].${ingredientKey}`, ingredientValue);
-            console.log(`ingredients[${i}].${ingredientKey}`, ingredientValue);
-          };
-        })
+				;(value as Array<PostProductIngredient>).forEach((v, i) => {
+					for (let [ingredientKey, ingredientValue] of Object.entries(v)) {
+						data.append(`ingredients[${i}].${ingredientKey}`, ingredientValue)
+						console.log(`ingredients[${i}].${ingredientKey}`, ingredientValue)
+					}
+				})
 			} else {
-        data.append(key, value)
-      }
+				data.append(key, value)
+			}
 		}
 		const response = await instance<null>({
 			url: `/products/${id}`,

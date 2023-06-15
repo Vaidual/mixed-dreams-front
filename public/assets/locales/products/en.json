@@ -6,9 +6,11 @@
 			"stock": "Stock"
 		},
     "actions": {
-      "edit": "Edit",
-      "delete":"Delete"
-    }
+			"edit": "Edit",
+			"delete": "Delete",
+			"duplicate": "Duplicate",
+			"exportAll": "Export all data"
+		}
 	},
   "actions": {
     "createProduct":"Create a Product"

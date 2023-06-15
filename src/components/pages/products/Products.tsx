@@ -30,6 +30,17 @@ const Products: FC = () => {
     }
   }, [isSuccess, error, setSnack, t, isLoading]);
 
+  const duplicateProduct = useMutation(['duplicateProduct'], (id: string) => {
+    return ProductService.duplicateProduct(id)
+  }, {
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['getCompanyProducts'] })
+      handleDeleteDialogClose();
+    },
+    onError(deletionError,) {
+      setSnack({ message: t(`common\\errors:${ErrorCodes[(deletionError as IStandardError)?.errorCode]}`), color: 'error', open: true, autoHideDuration: 10_000 })
+    }
+  })
   const columns = useMemo<MRT_ColumnDef<CompanyProduct>[]>(
     () => [
       {
@@ -101,6 +112,9 @@ const Products: FC = () => {
   const handleProductEdit = (id: string) => {
     navigate('/products/' + id);
   };
+  const handleProductDuplicate = (id: string) => {
+    duplicateProduct.mutate(id);
+  };
   const handleProductDelete = () => {
     deleteProduct.mutate(deleteModelProps.product?.id!);
   };
@@ -159,6 +173,9 @@ const Products: FC = () => {
             <MenuItem key="edit" onClick={() => handleProductEdit(row.getValue('id'))}>
               {t('table.actions.edit')}
             </MenuItem>,
+            <MenuItem key="duplicate" onClick={() => handleProductDuplicate(row.getValue('id'))}>
+              {t('table.actions.duplicate')}
+            </MenuItem>,
             <MenuItem key="delete" onClick={() => openDeleteModal(row.getValue('id'), row.getValue('name'))}>
               <Typography color='red'>
                 {t('table.actions.delete')}
@@ -174,9 +191,9 @@ const Products: FC = () => {
                 //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
                 onClick={handleExportData}
                 startIcon={<FileDownloadIcon />}
-                variant="contained"
+                variant="outlined"
               >
-                Export All Data
+                {t('table.actions.exportAll')}
               </Button>
 
             </Box>

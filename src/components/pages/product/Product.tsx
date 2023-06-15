@@ -134,7 +134,6 @@ const Product: FC = () => {
       setProduct(data);
       setImage(data.primaryImage !== null ? {url: data.primaryImage} : null)
       setProductIngredients(data.ingredients);
-      console.log(data.productCategory !== null ? categories.data?.find(c => c.id === data.productCategory)! : null)
       setCategory(data.productCategory !== null ? categories.data?.find(c => c.id === data.productCategory)! : null);
       reset(data);
     }
@@ -166,7 +165,7 @@ const Product: FC = () => {
   const updateProduct = useMutation(['updateProduct'], (product: PutProduct) => {
     return ProductService.updateProduct(productId!, product);
   }, {
-    onSuccess(newIngredient) {
+    onSuccess() { 
       if (image?.object) {
         URL.revokeObjectURL(image.url);
       }
@@ -179,11 +178,10 @@ const Product: FC = () => {
   });
 
   const onSubmit: SubmitHandler<SchemaType> = data => {
-    console.log(productIngredients);
     if (isEditing) {
       const putProduct = {
         ...data,
-        description: data.description === null ? ' ' : data.description,
+        description: data.description === null ? "" : data.description,
         primaryImage: image?.url === product.primaryImage || image === null ? null : image.object,
         changeImage: image?.url !== product.primaryImage,
         ingredients: productIngredients.map<PostProductIngredient>((i) => {
@@ -200,7 +198,7 @@ const Product: FC = () => {
     } else {
       const postProduct = {
         ...data,
-        description: data.description === null ? ' ' : data.description,
+        description: data.description === null ? "" : data.description,
         primaryImage: image === null ? null : image.object,
         ingredients: productIngredients.map<PostProductIngredient>((i) => {
           return {
