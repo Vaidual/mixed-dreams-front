@@ -7,5 +7,9 @@
   "actions": {
     "logIn":"Увійти",
     "logout":"Вийти"
+  },
+  "tooltips": {
+    "language": "Мова",
+    "toggleTheme": "Перемкнути кольорову тему"
   }
 }

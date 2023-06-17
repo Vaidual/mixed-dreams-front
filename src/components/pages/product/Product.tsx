@@ -1,5 +1,5 @@
 import { AppBar, Autocomplete, Box, Button, ButtonBase, Checkbox, Dialog, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, SvgIcon, TextField, Toolbar, Tooltip, Typography, useTheme } from '@mui/material'
-import { FC, ReactNode, forwardRef, useContext, useEffect, useMemo, useState } from 'react'
+import { FC, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SnackbarContext } from 'providers/Snackbar.provider';
@@ -30,7 +30,7 @@ yup.setLocale(yupLocale);
 
 interface FormProductType extends Omit<ProductWithDetails, "id"> {
   id: string | null,
-};
+}
 
 const defaultProduct: FormProductType = {
   id: null,
@@ -43,7 +43,8 @@ const defaultProduct: FormProductType = {
   recommendedTemperature: null,
   recommendedHumidity: null,
   ingredients: [],
-  productCategory: null
+  productCategory: null,
+  preparationTime: null
 };
 
 type SchemaType = Omit<FormProductType, "primaryImage" | "id" | "ingredients">
@@ -79,6 +80,13 @@ const schema = yup.object().shape({
     .nullable()
     .min(0)
     .max(100),
+  preparationTime: yup.number()
+    .integer()
+    .required()
+    .transform((value) => (isNaN(value) ? null : value))
+    .nullable()
+    .min(1)
+    .max(600),
 
 },).required();
 
@@ -353,6 +361,17 @@ const Product: FC = () => {
               InputProps={{
                 endAdornment: <InputAdornment position="end">$</InputAdornment>
               }}
+            />
+            <TextField {...register('preparationTime')}
+              error={!!errors.preparationTime}
+              helperText={
+                <ErrorMessage
+                  error={errors.preparationTime?.message}
+                  field={t('details.fields.preparationTime.label') as string}
+                />
+              }
+              label={t('details.fields.preparationTime.label')}
+              type='number'
             />
             <SectionDivider />
           </section>

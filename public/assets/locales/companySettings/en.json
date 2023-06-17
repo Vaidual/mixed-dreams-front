@@ -1,0 +1,12 @@
+{
+  "preparation": {
+    "title": "Preparation settings",
+    "fields": {
+      "cooksNumber": {
+        "label": "Cook's Number"
+      }
+    }
+  },
+  "saveSuccess": "Changes successfully applied.",
+  "noDataChange": "Data have no changes."
+}

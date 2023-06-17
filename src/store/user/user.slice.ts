@@ -27,7 +27,7 @@ export const userSlice = createSlice({
 			})
 			.addCase(registerCompany.fulfilled, (state, { payload }) => {
 				state.isLoading = false
-				state.user = payload.user
+				state.user = {...payload.user, entityId: payload.entityId}
 			})
 			.addCase(registerCompany.rejected, state => {
 				state.isLoading = false
@@ -38,7 +38,7 @@ export const userSlice = createSlice({
 			})
 			.addCase(login.fulfilled, (state, { payload }) => {
 				state.isLoading = false
-				state.user = payload.user
+				state.user = {...payload.user, entityId: payload.entityId}
 			})
 			.addCase(login.rejected, state => {
 				state.isLoading = false

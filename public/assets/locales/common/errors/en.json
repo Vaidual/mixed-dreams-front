@@ -8,5 +8,5 @@
   "InvalidCredentials"  :"Provided credentials are invalid.",
   "ParsingError" :"One of provided values has invalid format.",
   "ModelValidationError" :"Provided data has invalid format.",
-  "undefined" :"Looks like the server offline. Try contacting the administrator."
+  "undefined" :"Something went wrong. Try again later or contact the administrator."
 }

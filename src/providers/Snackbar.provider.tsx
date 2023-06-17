@@ -15,12 +15,12 @@ const DefaultSnack: Snack = {
   open: false,
 }
 
-type SnackDefaultValue = {
+type SnackContextType = {
   snack: Snack,
   setSnack: React.Dispatch<React.SetStateAction<Snack>>
 };
 
-export const SnackbarContext = createContext<SnackDefaultValue>({snack: DefaultSnack, setSnack: () => {}});
+export const SnackbarContext = createContext<SnackContextType>({snack: DefaultSnack, setSnack: () => {}});
 
 export function SnackbarProvider({ children }: { children: ReactNode }) {
   const [snack, setSnack] = useState(DefaultSnack);

@@ -7,14 +7,12 @@ import {
 	createBrowserRouter
 } from "react-router-dom"
 import App from "./App"
-import ErrorPage from "./components/pages/error/Error"
+import ErrorPage from "./components/pages/error/ErrorPage"
 import Home from "./components/pages/home/Home"
 import Login from "./components/pages/auth/login/Login"
 import RegisterWrapper from "components/pages/auth/register/Register/Register"
 import AuthForm from "components/pages/auth/auth/AuthForm"
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
-import "./i18n"
+import "./localization/i18n"
 import { yupLocale } from "utils/yupLocale"
 import * as yup from 'yup';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
@@ -27,6 +25,7 @@ import Products from "components/pages/products/Products"
 import { RequireRoles } from "helpers/routeProtection.helper"
 import Roles from "constants/Roles"
 import Product from "components/pages/product/Product"
+import SettingsPage from "./components/pages/settings/SettingsPage";
 
 yup.setLocale(yupLocale);
 
@@ -34,7 +33,7 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <App />,
-		errorElement: <ErrorPage />,
+        errorElement: <App><ErrorPage /></App>,
 		children: [
 			{
 				index: true,
@@ -55,11 +54,15 @@ const router = createBrowserRouter([
 			},
 			{
 				path: '/statistic',
-				element: <RequireRoles allowedRoles={[Roles.Company]}><Statistic /></RequireRoles> 
+				element: <RequireRoles allowedRoles={[Roles.Company]}><Statistic /></RequireRoles>
 			},
 			{
 				path: '/orders',
-				element: <RequireRoles allowedRoles={[Roles.Company]}><Orders /></RequireRoles> 
+				element: <RequireRoles allowedRoles={[Roles.Company]}><Orders /></RequireRoles>
+			},
+			{
+				path: '/companySettings',
+				element: <RequireRoles allowedRoles={[Roles.Company]}><SettingsPage /></RequireRoles>
 			},
 			{
 				path: '/products',
@@ -67,11 +70,11 @@ const router = createBrowserRouter([
 				children: [
 					{
 						path: '/products/new',
-						element: <RequireRoles allowedRoles={[Roles.Company]}><Product/></RequireRoles> 
+						element: <RequireRoles allowedRoles={[Roles.Company]}><Product/></RequireRoles>
 					},
 					{
 						path: '/products/:productId',
-						element: <RequireRoles allowedRoles={[Roles.Company]}><Product/></RequireRoles> 
+						element: <RequireRoles allowedRoles={[Roles.Company]}><Product/></RequireRoles>
 					},
 				]
 			},
@@ -93,9 +96,7 @@ root.render(
 		<Suspense>
 			<Provider store={store}>
 				<QueryClientProvider client={queryClient}>
-					<LocalizationProvider dateAdapter={AdapterDateFns}>
-						<RouterProvider router={router} />
-					</LocalizationProvider>
+					<RouterProvider router={router} />
 					<ReactQueryDevtools initialIsOpen={false} />
 				</QueryClientProvider>
 			</Provider>

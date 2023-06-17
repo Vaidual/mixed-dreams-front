@@ -1,17 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="38ba9fbc-51b1-4176-9667-ba5051d9d326" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/public/assets/locales/products/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/products/en.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/locales/products/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/products/ua.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/locales/common/sidebar/uk.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/locales/companySettings/en.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/locales/companySettings/uk.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/locales/notFound/en.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/locales/notFound/uk.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/AppLayout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/error/ErrorPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/pages/settings/SettingsPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ui/skeleton/ElementSkeleton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/interfaces/company.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/localization/localization-mappers.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/company/company.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/common/errors/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/common/errors/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/common/errors/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/common/errors/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/common/form/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/common/form/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/common/form/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/common/form/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/common/header/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/common/header/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/common/header/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/common/header/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/common/sidebar/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/common/sidebar/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/common/sidebar/ua.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/ingredients/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/ingredients/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/login/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/login/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/product/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/product/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/product/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/product/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/products/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/products/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/locales/register/ua.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/locales/register/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/api.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.interceptor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layout/header/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/header/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layout/sidebar/Sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/sidebar/Sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/auth/register/business/Business.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/auth/register/business/Business.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/error/Error.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/home/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/Home.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/product/Product.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/product/Product.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/products/Products.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/Products.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/products/products.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/products/products.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useMaterialReactTableLocalization.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useMaterialReactTableLocalization.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/i18n.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/localization/i18n.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/interfaces/auth.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/auth.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/interfaces/product.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/product.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/providers/Snackbar.provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/providers/Snackbar.provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/auth/auth.helper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth/auth.helper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/user/user.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/user/user.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/user/user.slice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/user/user.slice.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/Languge.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/Language.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -29,10 +82,43 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/projects/react/mixed-dreams-front/public/assets/locales/notFound",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "D:\\projects\\react\\mixed-dreams-front\\node_modules\\prettier",
+    "ts.external.directory.path": "D:\\projects\\react\\mixed-dreams-front\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\projects\react\mixed-dreams-front\public\assets\locales\notFound" />
+      <recent name="D:\projects\react\mixed-dreams-front\public\assets\locales\companySettings" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\projects\react\mixed-dreams-front\src\localization" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -42,7 +128,12 @@
       <option name="presentableId" value="Default" />
       <updated>1686412762015</updated>
       <workItem from="1686412766513" duration="25000" />
+      <workItem from="1686934044831" duration="2948000" />
+      <workItem from="1686994201265" duration="37087000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

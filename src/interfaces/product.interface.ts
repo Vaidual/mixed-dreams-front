@@ -50,17 +50,18 @@ export interface PostProductIngredient {
 }
 
 export interface ProductWithDetails {
-  id: string,
-  name: string,
-  description: string,
-  price: number | null,
-  amountInStock: number | null,
-  visibility: Visibility,
-  primaryImage: string | null,
-  recommendedTemperature: number | null,
-  recommendedHumidity: number | null,
-  ingredients: GetProductIngredient[]
-  productCategory: string | null
+	id: string
+	name: string
+	description: string
+	price: number | null
+	amountInStock: number | null
+	visibility: Visibility
+	primaryImage: string | null
+	recommendedTemperature: number | null
+	recommendedHumidity: number | null
+	ingredients: GetProductIngredient[]
+	productCategory: string | null
+	preparationTime: number | null
 }
 
 export interface ProductCategory {

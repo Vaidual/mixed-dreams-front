@@ -16,12 +16,17 @@ import jwt_decode from "jwt-decode";
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import Topics from 'constants/Topics';
 import { ICompanyClaims } from 'interfaces/claims.interface';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 type Item = {
   label: string,
   to: string,
   icon: ReactNode,
   suffix?: ReactNode
+}
+
+function isTextOverflowed(element: HTMLElement) {
+  return element.scrollWidth > element.clientWidth;
 }
 
 const Sidebar: FC = () => {
@@ -79,6 +84,7 @@ const Sidebar: FC = () => {
     // { label: "Orders", to: "/orders", icon: <ReceiptIcon /> },
     // { label: "Statistic", to: "/statistic", icon: <BarChartIcon /> },
     // { label: "Locations", to: "/locations", icon: <StorefrontIcon /> }
+    { label: t("settings"), to: "/companySettings", icon: <ManageAccountsIcon /> }
   ]
 
   return (

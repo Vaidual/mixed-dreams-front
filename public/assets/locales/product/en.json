@@ -9,25 +9,28 @@
 	"details": {
     "title": "Details",
     "fields": {
-      "name": {
-        "label": "Name"
-      },
-      "category": {
-        "label": "Category"
-      },
-      "description": {
-        "label": "Description"
-      },
-      "image": {
-        "label": "Cover photo",
-        "drag": "Drag image here or",
-        "upload": "upload",
-        "remove":"Remove"
-      },
-      "price": {
-        "label": "Price"
-      }
-    }
+			"name": {
+				"label": "Name"
+			},
+			"category": {
+				"label": "Category"
+			},
+			"description": {
+				"label": "Description"
+			},
+			"image": {
+				"label": "Cover photo",
+				"drag": "Drag image here or",
+				"upload": "upload",
+				"remove": "Remove"
+			},
+			"price": {
+				"label": "Price"
+			},
+			"preparationTime": {
+				"label": "Preparation Time"
+			}
+		}
   },
 	"settings": {
     "title": "Settings",

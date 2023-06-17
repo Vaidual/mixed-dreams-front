@@ -10,7 +10,7 @@ export const useMaterialReactTableLocalization = () => {
 		case 'en':
 			lang = MRT_Localization_EN
 			break;
-		case 'ua':
+		case 'uk':
 			lang = MRT_Localization_UK
 			break;
 		default:

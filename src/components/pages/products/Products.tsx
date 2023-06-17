@@ -16,7 +16,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { ExportToCsv } from 'export-to-csv';
 
 const Products: FC = () => {
-  const { t } = useTranslation(['products', 'common\\errors']);
+  const { t, i18n } = useTranslation(['products', 'common\\errors']);
   const queryClient = useQueryClient();
 
   const { isLoading, data, error, isSuccess } = useQuery<CompanyProduct[]>(['getCompanyProducts'], () => {
@@ -57,7 +57,7 @@ const Products: FC = () => {
         header: t('table.headers.price'),
         Cell: ({ cell }) => (
 
-          cell.getValue<number>()?.toLocaleString?.('en-US', {
+          cell.getValue<number>()?.toLocaleString?.(i18n.language, {
             style: 'currency',
             currency: 'USD',
           })
@@ -86,7 +86,7 @@ const Products: FC = () => {
               px: '0.25rem',
             })}
           >
-            {cell.getValue<number>()}
+            {cell.getValue<number>().toLocaleString?.(i18n.language)}
           </Box>
         ),
       },

@@ -23,8 +23,9 @@ export interface ILogin {
 }
 
 export interface IAuthResponse {
-  user: IUser,
-  tokens: ITokens
+	user: IUser
+	entityId: string
+	tokens: ITokens
 }
 
 export interface IUser {

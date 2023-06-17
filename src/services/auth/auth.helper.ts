@@ -6,10 +6,10 @@ import Cookies from "js-cookie"
 import jwt_decode from "jwt-decode"
 
 export const saveTokensStorage = (data: ITokens) => {
-	var decodedHeader: ICompanyClaims = jwt_decode(data.accessToken)
-	Cookies.set(CookiesTypes.AccessToken, data.accessToken, {
+    const decodedHeader: ICompanyClaims = jwt_decode(data.accessToken);
+    Cookies.set(CookiesTypes.AccessToken, data.accessToken, {
 		secure: true,
-		expires: decodedHeader.exp
+		expires: new Date(decodedHeader.exp * 1000)
 	})
 }
 

@@ -10,6 +10,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useTranslation } from 'react-i18next';
 import { ErrorMessage } from 'components/ui/text/ErrorMessage';
 import { yupLocale } from 'utils/yupLocale';
+import {LoadingButton} from "@mui/lab";
 
 yup.setLocale(yupLocale);
 
@@ -137,22 +138,12 @@ const Business: FC<{ onComplete: () => void; onPrev: () => void; isLoading: bool
     );
   }
 
-  const updateStateAndRegister = () => {
-    setFormState(
-      produce((formState) => {
-        const { companyName, birthday, firstName, lastName, apartment, ...address } = getValues()
-        formState.steps.business.value = {
-          companyName,
-          birthday: birthday ?? undefined,
-          firstName,
-          lastName,
-          address: { apartment: apartment ?? null, ...address }
-        }
-        formState.steps.business.valid = isValid;
-        formState.steps.business.dirty = false;
-        formState.steps.business.hadError = Object.entries(errors).length > 0;
-      })
-    );
+  const TryRegister = () => {
+      if (!isValid) {
+          trigger()
+          return
+      }
+      updateState()
   }
 
   useEffect(() => {
@@ -187,7 +178,7 @@ const Business: FC<{ onComplete: () => void; onPrev: () => void; isLoading: bool
                 //   return val;
                 // }}
                 className="w-full"
-                label="Birthday"
+                label={t("fields.birthday")}
                 value={value ?? null}
                 slotProps={{
                   textField: {
@@ -263,9 +254,9 @@ const Business: FC<{ onComplete: () => void; onPrev: () => void; isLoading: bool
         <Button onClick={() => { updateState(); onPrev(); }}>
           {t("buttons.prev")}
         </Button>
-        <Button onClick={() => { updateState(); }} disabled={!isValid || isLoading}>
-          {isLoading ? <CircularProgress color={"secondary"} size={'30px'} /> : t("buttons.finish")}
-        </Button>
+        <LoadingButton onClick={() => { TryRegister(); }} disabled={isLoading} loading={isLoading}>
+            <span>{t("buttons.finish")}</span>
+        </LoadingButton>
       </Box>
     </>
   )

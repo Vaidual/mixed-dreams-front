@@ -9,25 +9,28 @@
 	"details": {
     "title": "Деталі",
     "fields": {
-      "name": {
-        "label": "Назва"
-      },
-      "category": {
-        "label": "Категорія"
-      },
-      "description": {
-        "label": "Опис"
-      },
-      "image": {
-        "label": "Обкладинка",
-        "drag": "Перетягніть зображення сюди або",
-        "upload": "завантажте",
-        "remove":"Видалити"
-      },
-      "price": {
-        "label": "Ціна"
-      }
-    }
+			"name": {
+				"label": "Назва"
+			},
+			"category": {
+				"label": "Категорія"
+			},
+			"description": {
+				"label": "Опис"
+			},
+			"image": {
+				"label": "Обкладинка",
+				"drag": "Перетягніть зображення сюди або",
+				"upload": "завантажте",
+				"remove": "Видалити"
+			},
+			"price": {
+				"label": "Ціна"
+			},
+			"preparationTime": {
+				"label": "Час приготування"
+			}
+		}
   },
 	"settings": {
     "title": "Налаштування",

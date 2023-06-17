@@ -7,5 +7,9 @@
   "actions": {
     "logIn":"Log in",
     "logout":"Logout"
+  },
+  "tooltips": {
+    "language": "Language",
+    "toggleTheme": "Toggle color theme"
   }
 }
