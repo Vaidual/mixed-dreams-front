@@ -37,6 +37,7 @@
     "next": "Next",
     "prev": "Previous",
     "finish": "Finish",
-    "save": "Save"
+    "save": "Save",
+    "delete": "Delete"
   }
 }

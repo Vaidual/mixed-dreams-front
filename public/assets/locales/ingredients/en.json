@@ -15,7 +15,7 @@
     }
   },
   "units": {
-    "item": "Pieces",
+    "Item": "Pieces",
     "Cup": "Cups",
     "Gram": "Grams",
     "Kilogram": "Kilograms",

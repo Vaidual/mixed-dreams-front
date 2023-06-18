@@ -16,7 +16,8 @@
 				"label": "Category"
 			},
 			"description": {
-				"label": "Description"
+				"label": "Description",
+              "placeholder": "Add an item description. Describe details like features, options, or interesting notes"
 			},
 			"image": {
 				"label": "Cover photo",

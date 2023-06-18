@@ -25,6 +25,7 @@ import useUnitItems from 'components/ui/add-ingredient/UnitsItems';
 import { Delete, Edit } from '@mui/icons-material';
 import { Units } from 'enums/Units';
 import { yupLocale } from 'utils/yupLocale';
+import ErrorPage from "../error/ErrorPage";
 
 yup.setLocale(yupLocale);
 
@@ -115,10 +116,13 @@ const Product: FC = () => {
     staleTime: 10 * 60 * 1000
   });
 
-  const { isLoading, error, isSuccess, data } = useQuery<ProductWithDetails>(['getProductWithDetails', productId], () => {
+  const { isLoading, error, isSuccess, data} = useQuery<ProductWithDetails>(['getProductWithDetails', productId], () => {
     return ProductService.getProductWithDetails(productId!);
   }, {
-    enabled: isEditing
+    enabled: isEditing,
+    retry: (failureCount, error) => {
+      return (error as IStandardError).statusCode == 404 ? false : (failureCount < 4)
+    },
   });
 
   const { setSnack } = useContext(SnackbarContext);
@@ -159,7 +163,7 @@ const Product: FC = () => {
   const createProduct = useMutation(['createProduct'], (product: PostProduct) => {
     return ProductService.createProduct(product);
   }, {
-    onSuccess(newIngredient) {
+    onSuccess() {
       if (image?.object) {
         URL.revokeObjectURL(image.url);
       }
@@ -263,6 +267,7 @@ const Product: FC = () => {
     handleSubmit(onSubmit)();
   };
 
+  console.log(isEditing && isSuccess)
   return (
     <Dialog
       fullScreen
@@ -286,7 +291,7 @@ const Product: FC = () => {
         </Toolbar>
       </AppBar>
       {((isEditing && !isLoading) || !isEditing) &&
-        <div className='max-w-2xl mx-auto w-full mt-10'>
+          (((isEditing && isSuccess) || !isEditing) ? <div className='max-w-3xl mx-auto w-full mt-10'>
           <section className='flex flex-col space-y-5 mb-10 mt-10'>
             <SectionTitle title={t('details.title')} />
             <div className='flex flex-row  space-x-5'>
@@ -318,11 +323,11 @@ const Product: FC = () => {
                   }
                 />
               </div>
-              <div className='flex flex-col w-[192px] justify-between rounded-lg border border-solid border-gray-900/25 bg-gray-900/25'>
+              <div className={`flex flex-col w-[192px] justify-between rounded-lg border border-solid border-gray-900/25 ${image == null ?? "bg-gray-900/25"}`}>
                 {image != null &&
                   <>
-                    <img className='max-h-[90px] w-[192px] rounded-t-lg object-cover' src={image.url} alt='' />
-                    <Button sx={{ backgroundColor: palette.grey[800] }} className={`min-h-6 self-end h-full rounded-b-lg bg-[${palette.background.default}]`}
+                    <img className='max-h-[90px] w-[190px] rounded-t-lg object-cover' src={image.url} alt='' />
+                    <Button className={`min-h-6 self-end h-full rounded-b-lg font-bold`}
                       onClick={clearImage}
                       variant='text'
                       fullWidth
@@ -341,7 +346,7 @@ const Product: FC = () => {
                   field={t('details.fields.description.label') as string}
                 />
               }
-              placeholder="Add an item description. Describe details like features, options, or interesting notes"
+              placeholder={t("details.fields.description.placeholder") as string}
               multiline
             />
             <div>
@@ -447,7 +452,9 @@ const Product: FC = () => {
             />
             <SectionDivider />
           </section>
-        </div>
+        </div> : <div className="mx-auto mt-20">
+            <ErrorPage/>
+          </div>)
       }
       <ConfirmDialog
         title={isEditing ? t('leaveDialog.title.edit') : t('leaveDialog.title.create')}
@@ -513,7 +520,7 @@ const IngredientsTable: FC<{
 }> = ({
   data, addIngredient, handleDeleteIngredient, handleUpdateIngredients }) => {
     const items = useUnitItems()
-    const { t } = useTranslation(['product', 'ingredients']);
+    const { t } = useTranslation(['product', 'ingredients', 'common\\form']);
 
     const columns = useMemo<MRT_ColumnDef<GetProductIngredient>[]>(
       () => [
@@ -524,6 +531,7 @@ const IngredientsTable: FC<{
         {
           accessorKey: 'name',
           header: t('ingredients.headers.name'),
+          maxSize: 100,
         },
         {
           accessorKey: 'hasAmount',
@@ -540,11 +548,12 @@ const IngredientsTable: FC<{
         },
         {
           accessorKey: 'amount',
+          maxSize: 40,
           header: t('ingredients.headers.amount'),
           Cell: ({ cell }) => (
             cell.getValue<number>() ? <span >{cell.getValue<number>()}</span> : <span >&#8212;</span>
           ),
-          enableEditing: row => row.getValue<boolean>('hasAmount') === true
+          enableEditing: row => row.getValue<boolean>('hasAmount')
         },
         {
           accessorKey: 'unit',
@@ -554,7 +563,7 @@ const IngredientsTable: FC<{
           Cell: ({ cell }) => (
             cell.getValue<number>() ? <span >{t(`ingredients:units.${Units[cell.getValue<number>()]}`)}</span> : <span >&#8212;</span>
           ),
-          enableEditing: row => row.getValue<boolean>('hasAmount') === true
+          enableEditing: row => row.getValue<boolean>('hasAmount')
         },
       ],
       [items],
@@ -597,7 +606,7 @@ const IngredientsTable: FC<{
                 <AddBoxIcon />
               </IconButton>
             </Tooltip>
-            {addModalProps.isOpen === true ? <AddIngredientModal
+            {addModalProps.isOpen ? <AddIngredientModal
               addIngredient={addIngredient}
               isOpen={true}
               handleClose={handleAddDialogClose} /> : null}
@@ -610,7 +619,7 @@ const IngredientsTable: FC<{
               <Edit />
             </IconButton>
           </Tooltip> */}
-            <Tooltip arrow placement="right" title="Delete">
+            <Tooltip arrow placement="right" title={t("common\\form:buttons.delete")}>
               <IconButton color="error" onClick={() => handleDeleteIngredient(row.getValue('id'))}>
                 <Delete />
               </IconButton>

@@ -1,3 +1,4 @@
 export interface ICompanySettings {
-	cooksNumber: number | null
+	cooksNumber: number | null,
+	maxSimultaneousOrders: number | null,
 }

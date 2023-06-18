@@ -3,10 +3,16 @@
     "title": "Preparation settings",
     "fields": {
       "cooksNumber": {
-        "label": "Cook's Number"
+        "label": "Cook's Number",
+        "description": "Affects the calculation of turnaround time. If not specified, the time specified in the products plus the time to the pickup point will be used."
+      },
+      "maxSimultaneousOrders": {
+        "label": "Maximum number of single-site orders",
+        "description": "If not specified, the number of simultaneous orders is not limited."
       }
     }
   },
+  "emptyPlaceholder": "Not specified",
   "saveSuccess": "Changes successfully applied.",
   "noDataChange": "Data have no changes."
 }
