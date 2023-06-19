@@ -9,6 +9,10 @@
       "maxSimultaneousOrders": {
         "label": "Maximum number of single-site orders",
         "description": "If not specified, the number of simultaneous orders is not limited."
+      },
+      "acceptOrders": {
+        "label": "Accept orders: ",
+        "description": "If not specified, your products will not appear in the search."
       }
     }
   },

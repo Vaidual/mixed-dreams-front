@@ -1,9 +1,9 @@
 import {yupResolver} from '@hookform/resolvers/yup';
-import {Skeleton, TextField, Tooltip} from '@mui/material'
+import {Checkbox, FormControlLabel, TextField, Tooltip} from '@mui/material'
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {ErrorMessage} from 'components/ui/text/ErrorMessage';
-import {FC, useContext, useEffect, useMemo, useState} from 'react'
-import {useForm} from 'react-hook-form';
+import React, {FC, useContext, useEffect, useState} from 'react'
+import {Controller, useForm} from 'react-hook-form';
 import {yupLocale} from 'utils/yupLocale';
 import * as yup from 'yup'
 import {CompanyService} from "../../../services/company/company.service";
@@ -32,6 +32,8 @@ const schema = yup.object().shape({
         .nullable()
         .min(1)
         .max(10000),
+    acceptOrders: yup.boolean()
+        .required(),
 });
 
 const getCompanySettingsKey = 'getCompanySettings'
@@ -50,10 +52,12 @@ const SettingsPage: FC = () => {
         return CompanyService.updateCompanySettings(companySettings);
     }, {
         onSuccess: () => {
+            console.log(1)
             queryClient.invalidateQueries({queryKey: [getCompanySettingsKey]});
             setSnack({message: t("saveSuccess"), color: 'success', open: true, autoHideDuration: 6_000});
         },
         onError: error => {
+            console.log(2)
             setSnack({
                 message: t(`common\\errors:${ErrorCodes[(error as IStandardError)?.errorCode]}`),
                 color: 'error',
@@ -66,7 +70,7 @@ const SettingsPage: FC = () => {
         setStartValues(getCompanySettingsQuery.data)
     }, [getCompanySettingsQuery.data]);
 
-    const {register, formState: {errors}, handleSubmit} = useForm<ICompanySettings>({
+    const {register, formState: {errors}, handleSubmit, control} = useForm<ICompanySettings>({
         resolver: yupResolver(schema),
         mode: 'onChange',
         values: getCompanySettingsQuery.data
@@ -90,7 +94,7 @@ const SettingsPage: FC = () => {
                                            fullWidth
                                            placeholder={t("emptyPlaceholder") as string}
                                            error={!!errors.cooksNumber}
-                                           InputLabelProps={{ shrink: true }}
+                                           InputLabelProps={{shrink: true}}
                                            helperText={
                                                <ErrorMessage
                                                    error={errors.cooksNumber?.message}
@@ -113,7 +117,7 @@ const SettingsPage: FC = () => {
                                            placeholder={t("emptyPlaceholder") as string}
                                            fullWidth
                                            error={!!errors.maxSimultaneousOrders}
-                                           InputLabelProps={{ shrink: true }}
+                                           InputLabelProps={{shrink: true}}
                                            helperText={
                                                <ErrorMessage
                                                    error={errors.maxSimultaneousOrders?.message}
@@ -124,6 +128,28 @@ const SettingsPage: FC = () => {
                                            type='number'
                                 />
                                 <Tooltip className="" title={t('preparation.fields.maxSimultaneousOrders.description')}
+                                         enterTouchDelay={1} enterNextDelay={1} enterDelay={1}
+                                         placement="right-start">
+                                    <HelpOutlineIcon className="w-7 h-7 p-1"/>
+                                </Tooltip>
+                            </div>
+                        </ElementSkeleton>
+                        <ElementSkeleton isLoading={getCompanySettingsQuery.isLoading}>
+                            <div className="flex flex-row">
+                                <FormControlLabel labelPlacement="start"
+                                    control={
+                                        <Controller
+                                            control={control}
+                                            name="acceptOrders"
+                                            render={({field}) =>
+                                                <Checkbox {...field}
+                                                          defaultChecked={getCompanySettingsQuery.data?.acceptOrders}/>
+                                            }
+                                        />
+                                    }
+                                    label={t('preparation.fields.acceptOrders.label')}
+                                />
+                                <Tooltip className="" title={t('preparation.fields.acceptOrders.description')}
                                          enterTouchDelay={1} enterNextDelay={1} enterDelay={1}
                                          placement="right-start">
                                     <HelpOutlineIcon className="w-7 h-7 p-1"/>
