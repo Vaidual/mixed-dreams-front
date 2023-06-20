@@ -116,7 +116,6 @@ const AddIngredientModal: FC<Props> = ({isOpen, handleClose, onSave, ingredientT
         resolver: yupResolver(schema),
         defaultValues: ingredientToUpdate
     });
-    console.log(ingredientToUpdate)
 
     const [measureInputsDisabled, setMeasureInputsDisabled] = useState<boolean>(ingredientToUpdate ? !ingredientToUpdate.hasAmount : false);
 
@@ -144,7 +143,7 @@ const AddIngredientModal: FC<Props> = ({isOpen, handleClose, onSave, ingredientT
         </MenuItem>);
     return (
         <ConfirmDialog
-            title={t('addToProductDialog.title')}
+            title={isEditing ? t('addToProductDialog.editTitle') : t('addToProductDialog.addTitle')}
             description={ingredients.isLoading ?
                 <Skeleton className='h-56' variant="rectangular"/>
                 : (

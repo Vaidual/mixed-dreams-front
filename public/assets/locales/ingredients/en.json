@@ -6,7 +6,8 @@
     "unit": "Unit"
   },
   "addToProductDialog": {
-    "title": "Add an ingredient",
+    "addTitle": "Add an ingredient",
+    "editTitle": "Edit ingredient",
     "content": {
       "pickIngredient": "Pick ingredient"
     },

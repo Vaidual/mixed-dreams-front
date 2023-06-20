@@ -1,0 +1,1 @@
+export type StatisticInterval = 'd1' | 'd7'| 'm1'

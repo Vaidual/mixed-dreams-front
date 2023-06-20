@@ -29,7 +29,8 @@
 				"label": "Ціна"
 			},
 			"preparationTime": {
-				"label": "Час приготування"
+				"label": "Час приготування",
+              "endAdornment": "хв"
 			}
 		}
   },

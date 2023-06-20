@@ -369,6 +369,9 @@ const Product: FC = () => {
               }}
             />
             <TextField {...register('preparationTime')}
+               InputProps={{
+                 endAdornment: <InputAdornment position="end">{t('details.fields.preparationTime.endAdornment')}</InputAdornment>
+               }}
               error={!!errors.preparationTime}
               helperText={
                 <ErrorMessage
@@ -429,6 +432,9 @@ const Product: FC = () => {
           <section className='flex flex-col space-y-5 mb-10'>
             <SectionTitle title={t('storageFeatures.title')} />
             <TextField {...register('recommendedTemperature')}
+               InputProps={{
+                 endAdornment: <InputAdornment position="end">°C</InputAdornment>
+               }}
               error={!!errors.recommendedTemperature}
               helperText={
                 <ErrorMessage
@@ -441,6 +447,9 @@ const Product: FC = () => {
             />
             <TextField {...register('recommendedHumidity')}
               //InputLabelProps={{ shrink: getValues('recommendedHumidity') !== null}}
+               InputProps={{
+                 endAdornment: <InputAdornment position="end">%</InputAdornment>
+               }}
               error={!!errors.recommendedHumidity}
               helperText={
                 <ErrorMessage
@@ -655,7 +664,7 @@ const IngredientsTable: FC<{
 
                 onSave={addModalProps.isEditing ? (newIngredient: GetProductIngredient) => handleUpdateIngredients(newIngredient, addModalProps.ingredientToUpdate.id) : addIngredient}
                 isOpen={true}
-                handleClose={handleAddDialogClose} ingredientToUpdate={addModalProps.isEditing ? addModalProps?.ingredientToUpdate : undefined} isEditing={false}/> : null}
+                handleClose={handleAddDialogClose} ingredientToUpdate={addModalProps.isEditing ? addModalProps?.ingredientToUpdate : undefined} isEditing={addModalProps.isEditing}/> : null}
           </div>;
         }}
         renderRowActions={({ row, table }) => (

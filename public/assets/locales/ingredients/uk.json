@@ -6,7 +6,8 @@
     "unit": "Одиниця виміру"
   },
   "addToProductDialog": {
-    "title": "Додати інгредієнт",
+    "addTitle": "Додати інгредієнт",
+    "editTitle": "Рерагувати інгредієнт",
     "content": {
       "pickIngredient": "Виберіть інгредієнт"
     },

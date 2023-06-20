@@ -77,9 +77,9 @@ const Sidebar: FC = () => {
 
   const menuItems: Item[] = [
     { label: t("products"), to: "/products", icon: <SellIcon /> },
-    // {
-    //   label: "Devices", to: "/devices", icon: <DeviceHubIcon />, suffix: notificationsCount > 0 ? <Badge badgeContent={notificationsCount} color='warning' /> : null
-    // },
+    {
+      label: "Devices", to: "/devices", icon: <DeviceHubIcon />, suffix: notificationsCount > 0 ? <Badge badgeContent={notificationsCount} color='warning' /> : null
+    },
     // { label: "Ingredients", to: "/ingredients", icon: <EggIcon /> },
     // { label: "Orders", to: "/orders", icon: <ReceiptIcon /> },
     // { label: "Statistic", to: "/statistic", icon: <BarChartIcon /> },

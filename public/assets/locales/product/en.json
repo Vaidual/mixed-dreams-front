@@ -29,7 +29,8 @@
 				"label": "Price"
 			},
 			"preparationTime": {
-				"label": "Preparation Time"
+				"label": "Preparation Time",
+              "endAdornment": "min"
 			}
 		}
   },
